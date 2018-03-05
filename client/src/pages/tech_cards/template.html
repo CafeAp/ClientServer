@@ -1,0 +1,40 @@
+  <div class="tech-card-block">
+  <table class="table-sm table-bordered">
+    <thead>
+      <tr>
+        <th>Блюдо</th>
+        <th>Категория</th>
+        <th>Состав</th>
+        <th>Выход</th>
+        <th>Себест</th>
+        <th>Цена</th>
+        <th>Наценка</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(techCard, i) in techCards">
+        <td>
+          <div class="table-row-image">
+            <img :src="techCard.image" class="table-row-image">
+          </div>
+          {{techCard.name}}
+        </td>
+        <td>{{techCard.category}}</td>
+        <td>
+          <a href="#" @click="toggleComposition(techCard.id)">{{!cardsIdsWithShownComposition.includes(techCard.id) ? 'посмотреть состав' : 'скрыть состав'}}</a>
+          <ul v-if="cardsIdsWithShownComposition.includes(techCard.id)">
+            <li v-for="techCardIngredient in techCard.techCardIngredients">{{techCardIngredient.ingredient.name}}</li>
+          </ul>
+        </td>
+        <td>{{_sumBy(techCard.techCardIngredients, 'netWeight')}}г</td>
+        <td></td>
+        <td>{{techCard.price}}р</td>
+        <td>
+          <i class="table-action fa fa-edit" @click="editTechCard(techCard, i)"></i>
+          <i class="table-action fa fa-remove" @click="deleteTechCard(techCard, i)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

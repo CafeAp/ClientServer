@@ -1,0 +1,23 @@
+<div class="ingredients-block">
+  <table class="table-sm table-bordered">
+    <thead>
+      <tr>
+        <th>Название</th>
+        <th>Ед. измерения</th>
+        <th>Потери</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(ingredient, i) in ingredients">
+        <td>{{ingredient.name}}</td>
+        <td>{{ingredient.measure}}</td>
+        <td>{{ingredient.lost_clean}}%, {{ingredient.lost_boil}}%, {{ingredient.lost_fry}}%, {{ingredient.lost_stew}}%, {{ingredient.lost_bake}}%</td>
+        <td>
+          <i class="table-action fa fa-edit" @click="editIngredient(ingredient, i)"></i>
+          <i class="table-action fa fa-remove" @click="deleteIngredient(ingredient, i)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,90 @@
+<div class="edit-tech-card">
+  <form class="edit-item-form">
+    <div class="form-group">
+      <label for="name">Название</label>
+      <input v-focus v-model="newTechCard.name" type="text" id="name" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="category">Категория</label>
+      <input v-model="newTechCard.category" type="text" id="category" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="image">Фотография</label>
+      <input type="file" id="image" class="form-control-file" @change="loadImage($event)">
+    </div>
+  </form>
+  <div v-if="ingredients" class="ingredients-table-wrapper">
+    <h5>Ингредиенты</h5>
+    <table class="table-sm table-bordered">
+      <thead>
+      <tr>
+        <th>Ингредиент</th>
+        <th>Брутто</th>
+        <th>Нетто</th>
+        <th>Цена</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="techCardIngredient in newTechCard.techCardIngredients">
+        <td>
+          <select v-model="techCardIngredient.ingredient.id" class="form-control">
+            <option v-for="ingredient in ingredients" :value="ingredient.id">{{ingredient.name}}</option>
+          </select>
+        </td>
+        <td>
+          <input v-model.number="techCardIngredient.grossWeight" type="number" class="form-control">
+        </td>
+        <td>
+          <input v-model.number="techCardIngredient.netWeight" type="number" class="form-control">
+        </td>
+        <td>
+          {{techCardIngredient.price}}руб
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="footer">
+      <a href="#" @click="addNewIngredient">Добавить ингредиент</a>
+      <div class="exit-weight">
+        <span>Выход: {{exitWeight}}г</span>
+      </div>
+    </div>
+  </div>
+  <div class="price-block">
+    <div class="price-block-item self-price">
+      <div class="header">
+        Себестоимость
+      </div>
+      <div class="body">0р</div>
+    </div>
+    <div class="sign">+</div>
+    <div class="price-block-item extra-price">
+      <div class="header">
+        Наценка
+      </div>
+      <div class="body">
+        <div class="input">
+          <input v-model.number="extraPrice" type="number" id="extraPrice" class="form-control">
+        </div>
+        <span>%</span>
+      </div>
+    </div>
+    <div class="sign">=</div>
+    <div class="price-block-item total-price">
+      <div class="header">
+        Цена
+      </div>
+      <div class="body">
+        <div class="input">
+          <input v-model.number="newTechCard.price" type="number" id="price" class="form-control">
+        </div>
+        <span>р</span>
+      </div>
+    </div>
+  </div>
+  <div class="buttons">
+    <button v-if="alertMessage === null" class="btn btn-primary" :disabled="!validForm" @click="saveTechCard">Сохранить</button>
+    <div v-else-if="alertMessage === 'success'" class="alert alert-success">Тех карта добавлена успешно</div>
+    <div v-else-if="alertMessage === 'error'" class="alert alert-danger">Ошибка при добавлении тех карты</div>
+  </div>
+</div>

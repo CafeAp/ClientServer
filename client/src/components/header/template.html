@@ -1,0 +1,11 @@
+<div class="header">
+  <router-link v-if='backLink' class="back" :to="backLink">
+    <i class="fa fa-angle-double-left"></i>
+  </router-link>
+  <div class="headling" v-if="headling">
+    <h2>{{headling}}</h2>
+  </div>
+  <div class="buttons" v-if="buttons">
+    <router-link v-for="button in buttons" :to="button.link" class="btn btn-lg btn-primary">{{button.text}}</router-link>
+  </div>
+</div>

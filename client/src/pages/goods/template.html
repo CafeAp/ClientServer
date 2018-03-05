@@ -1,0 +1,32 @@
+<div class="goods-block">
+  <table class="table-sm table-bordered">
+    <thead>
+      <tr>
+        <th>Товар</th>
+        <th>Категория</th>
+        <th>Себест.</th>
+        <th>Цена</th>
+        <th>Наценка</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(product, i) in goods">
+        <td>
+          <div class="table-row-image">
+            <img :src="product.image" class="table-row-image">
+          </div>
+          {{product.name}}
+        </td>
+        <td>{{product.category}}</td>
+        <td></td>
+        <td>{{product.price}}</td>
+        <td></td>
+        <td>
+          <i class="table-action fa fa-edit" @click="editGoods(product, i)"></i>
+          <i class="table-action fa fa-remove" @click="deleteGoods(product, i)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

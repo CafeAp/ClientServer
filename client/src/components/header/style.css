@@ -1,0 +1,13 @@
+.headling {
+  margin: 15px 15px 0;
+  float: left;
+}
+.back {
+  float: left;
+  font-size: 30px;
+  margin: 12px 0 0 15px;
+}
+.buttons {
+  float: right;
+  margin: 10px 15px;
+}

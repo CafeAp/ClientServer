@@ -1,0 +1,57 @@
+<div class="edit-ingredient">
+  <form class="edit-item-form">
+    <div class="form-group">
+      <label for="name">Название</label>
+      <input v-focus v-model="newIngredient.name" type="text" id="name" class="form-control">
+    </div>
+    <div class="form-group short">
+      <label for="measure">Ед. измерения</label>
+      <select v-model="newIngredient.measure" id="measure" class="form-control">
+        <option value="kg">кг</option>
+        <option value="lt">л</option>
+      </select>
+    </div>
+    <div class="form-group short">
+      <label for="lost_clean">% потерь при</label>
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Очистке</span>
+        </div>
+        <input v-model="newIngredient.lost_clean" type="number" min="0" max="100" id="lost_clean" class="form-control">
+      </div>
+
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Варке</span>
+        </div>
+        <input v-model="newIngredient.lost_boil" type="number" min="0" max="100" id="lost_boil" class="form-control">
+      </div>
+
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Жарке</span>
+        </div>
+        <input v-model="newIngredient.lost_fry" type="number" min="0" max="100" id="lost_fry" class="form-control">
+      </div>
+
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Тушении</span>
+        </div>
+        <input v-model="newIngredient.lost_skew" type="number" min="0" max="100" id="lost_skew" class="form-control">
+      </div>
+
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Запекании</span>
+        </div>
+        <input v-model="newIngredient.lost_bake" type="number" min="0" max="100" id="lost_bake" class="form-control">
+      </div>
+    </div>
+  </form>
+  <div class="buttons">
+    <button v-if="alertMessage === null" class="btn btn-primary" :disabled="!validForm" @click="saveIngredient">Сохранить</button>
+    <div v-else-if="alertMessage === 'success'" class="alert alert-success">Ингредиент добавлен успешно</div>
+    <div v-else-if="alertMessage === 'error'" class="alert alert-danger">Ошибка при добавлении ингредиента</div>
+  </div>
+</div>
