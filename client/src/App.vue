@@ -7,10 +7,10 @@
           <span>Меню</span>
         </a>
         <div class="collapse show" id="menu">
-          <router-link to="goods">Товары</router-link>
-          <router-link to="tech_cards">Тех карты</router-link>
-          <router-link to="ingredients">Ингредиенты</router-link>
-          <router-link to="goods_categories">Категории товаров и тех карт</router-link>
+          <router-link to="/goods">Товары</router-link>
+          <router-link to="/tech_cards">Тех карты</router-link>
+          <router-link to="/ingredients">Ингредиенты</router-link>
+          <router-link to="/goods_categories">Категории товаров и тех карт</router-link>
         </div>
 
         <a href="#warehouse" class="menu-category" data-toggle="collapse">
@@ -18,7 +18,7 @@
           <span>Склад</span>
         </a>
         <div class="collapse show" id="warehouse">
-          <router-link to="supplies">Поставки</router-link>
+          <router-link to="/supplies">Поставки</router-link>
         </div>
       </div>
     </div>

@@ -91,10 +91,18 @@ export default {
       return Math.ceil(this.warehouseMap[techCardIngredient.ingredient.name].metrics.averagePrice * techCardIngredient.grossWeight)
     },
     calcTotalPrice: function () {
-      this.newTechCard.price = Math.ceil(this.selfPrice * (this.extraPrice * 0.01))
+      this.newTechCard.price = this.selfPrice + Math.ceil(this.selfPrice * (this.extraPrice * 0.01))
     },
     calcExtraPrice: function () {
       this.extraPrice = Math.ceil((this.newTechCard.price / this.selfPrice) * 0.01)
+    }
+  },
+  watch: {
+    'newTechCard.techCardIngredients': {
+      handler: function () {
+        this.calcTotalPrice()
+      },
+      deep: true
     }
   }
 }
