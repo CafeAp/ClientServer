@@ -9,7 +9,7 @@
         <div class="collapse show" id="menu">
           <router-link to="goods">Товары</router-link>
           <router-link to="tech_cards">Тех карты</router-link>
-          <router-link to="/ingredients">Ингредиенты</router-link>
+          <router-link to="ingredients">Ингредиенты</router-link>
           <router-link to="goods_categories">Категории товаров и тех карт</router-link>
         </div>
 
@@ -18,7 +18,7 @@
           <span>Склад</span>
         </a>
         <div class="collapse show" id="warehouse">
-          <a href="#">Склад</a>
+          <router-link to="supplies">Поставки</router-link>
         </div>
       </div>
     </div>
@@ -171,6 +171,26 @@
       top: -1px;
       font-size: 19px;
       color: $c-danger;
+    }
+  }
+  .sub-items-table-wrapper {
+    padding: 10px;
+    background: #eee;
+    table {
+      margin: 10px 0;
+      th, td {
+        font-size: $f-size;
+      }
+    }
+    .footer {
+      padding: 5px 10px;
+      border-top: 1px solid lightgrey;
+      .exit-weight {
+        float: right;
+        margin-right: 36%;
+        font-size: 13px;
+        font-weight: bold;
+      }
     }
   }
 </style>

@@ -1,0 +1,23 @@
+<div class="supplies-block">
+  <table class="table-sm table-bordered">
+    <thead>
+      <tr>
+        <th>Дата</th>
+        <th>Товары</th>
+        <th>Сумма</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(supply, i) in supplies">
+        <td>{{supply.date}}</td>
+        <td>{{supply.supplyItems.map(g => `${getConcreteSupplyItem(g).name}(${g.amount}${g.packaging || ''})`).join(', ')}}</td>
+        <td>{{_sumBy(supply.supplyItems, 'totalPrice')}}</td>
+        <td>
+          <i class="table-action fa fa-edit" @click="editSupply(supply, i)"></i>
+          <i class="table-action fa fa-remove" @click="deleteSupply(supply, i)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

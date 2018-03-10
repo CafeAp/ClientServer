@@ -2,6 +2,7 @@ import { mapGetters } from 'vuex'
 import newTechCardIngredientTPL from '@/assets/model_templates/new_tech_card_ingredient.tpl.js'
 import _cloneDeep from 'lodash/cloneDeep'
 import _sumBy from 'lodash/sumBy'
+import _sum from 'lodash/sum'
 import utils from '@/assets/utils'
 
 export default {
@@ -16,10 +17,11 @@ export default {
         price: 0,
         techCardIngredients: []
       },
-      extraPrice: 0
+      extraPrice: 0,
+      warehouse: null
     }
   },
-  created() {
+  mounted() {
     this.$http.get('api/ingredients/list').then(resp => {
       this.ingredients = resp.body
     })
@@ -36,9 +38,24 @@ export default {
     },
     exitWeight() {
       return _sumBy(this.newTechCard.techCardIngredients, 'netWeight')
+    },
+    warehouseMap() {
+      let obj = {}
+      this.warehouse.forEach(d => {
+        if (d.supplyItemType === 'ingredient') {
+          obj[d.name] = d
+        }
+      })
+      return obj
+    },
+    selfPrice() {
+      return _sum(this.newTechCard.techCardIngredients.map(d => this.getIngredientPrice(d)))
     }
   },
-  mounted() {
+  created() {
+    this.$http.get('api/warehouse/get', {params: {id: this.$route.params.id}}).then(resp => {
+      this.warehouse = resp.body
+    })
     if (!this.isNew) {
       this.$http.get('api/tech_cards/get', {params: {id: this.$route.params.id}}).then(resp => {
         this.$set(this, 'newTechCard', resp.body)
@@ -46,6 +63,7 @@ export default {
     }
   },
   methods: {
+    _sum,
     saveTechCard() {
       this.$http.post(`api/tech_cards/${this.isNew ? 'add' : 'edit'}`, this.newTechCard).then(resp => {
         this.$store.dispatch('setAlertMessageForTime', 'success')
@@ -64,6 +82,19 @@ export default {
       utils.loadImage(e, e => {
         this.newTechCard.image = e.target.result
       })
+    },
+    changeNetWeight: function (e, techCardIngredient) {
+      techCardIngredient.netWeight = techCardIngredient.grossWeight
+    },
+    getIngredientPrice: function (techCardIngredient) {
+      if (techCardIngredient.ingredient.id === null) return 0
+      return Math.ceil(this.warehouseMap[techCardIngredient.ingredient.name].metrics.averagePrice * techCardIngredient.grossWeight)
+    },
+    calcTotalPrice: function () {
+      this.newTechCard.price = Math.ceil(this.selfPrice * (this.extraPrice * 0.01))
+    },
+    calcExtraPrice: function () {
+      this.extraPrice = Math.ceil((this.newTechCard.price / this.selfPrice) * 0.01)
     }
   }
 }

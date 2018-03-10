@@ -1,0 +1,62 @@
+<div class="edit-supply">
+  <form class="edit-item-form">
+    <div class="form-group">
+      <label>Дата и время поставки</label>
+      <div>
+        <date-picker v-model="newSupply.date" lang="ru"></date-picker>
+      </div>
+    </div>
+  </form>
+  <div class="sub-items-table-wrapper">
+    <h5>Товары</h5>
+    <table class="table-sm table-bordered">
+      <thead>
+      <tr>
+        <th>Название</th>
+        <th>Фасовка</th>
+        <th>Количество</th>
+        <th>Цена за ед</th>
+        <th>Прежняя цена</th>
+        <th>Сумма</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="supplyItem in newSupply.supplyItems">
+        <td>
+          <select v-model="supplyItem.concreteSupplyItem" class="form-control">
+            <option v-for="concreteSupplyItem in concreteSupplyItems"
+                    v-show="!newSupply.supplyItems.find(s => s.concreteSupplyItem.value && s.concreteSupplyItem.value.id === concreteSupplyItem.value.id && s.concreteSupplyItem.value.name === concreteSupplyItem.value.name)"
+                    :value="concreteSupplyItem">{{concreteSupplyItem.value.name}}</option>
+          </select>
+        </td>
+        <td>
+          Упаковка
+          <!--<select v-model="supplyGood.packaging">-->
+          <!--<option v-for="['lt', 'kg']" value=""></option>-->
+          <!--</select>-->
+        </td>
+        <td>
+          <input v-model.number="supplyItem.amount" type="number" class="form-control" @input="recalcTotalPrice(supplyItem)">
+        </td>
+        <td>
+          <input v-model.number="supplyItem.priceForOne" type="number" class="form-control" @input="recalcTotalPrice(supplyItem)">
+        </td>
+        <td>
+          Прежняя цена
+        </td>
+        <td>
+          <input v-model.number="supplyItem.totalPrice" type="number" class="form-control" @input="recalcPriceForOne(supplyItem)">
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="footer">
+      <a href="#" @click.prevent="addNewSupplyItem">Добавить товар</a>
+    </div>
+  </div>
+  <div class="buttons">
+    <button v-if="alertMessage === null" class="btn btn-primary" :disabled="!validForm" @click="saveSupply">Сохранить</button>
+    <div v-else-if="alertMessage === 'success'" class="alert alert-success">Поставка добавлена успешно</div>
+    <div v-else-if="alertMessage === 'error'" class="alert alert-danger">Ошибка при добавлении поставки</div>
+  </div>
+</div>

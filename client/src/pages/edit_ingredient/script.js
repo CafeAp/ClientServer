@@ -7,11 +7,11 @@ export default {
       newIngredient: {
         name: null,
         measure: 'kg',
-        lost_clean: 0,
-        lost_boil: 0,
-        lost_fry: 0,
-        lost_skew: 0,
-        lost_bake: 0
+        lostClean: 0,
+        lostBoil: 0,
+        lostFry: 0,
+        lostStew: 0,
+        lostBake: 0
       }
     }
   },

@@ -13,7 +13,7 @@
       <input type="file" id="image" class="form-control-file" @change="loadImage($event)">
     </div>
   </form>
-  <div v-if="ingredients" class="ingredients-table-wrapper">
+  <div v-if="ingredients" class="sub-items-table-wrapper">
     <h5>Ингредиенты</h5>
     <table class="table-sm table-bordered">
       <thead>
@@ -27,18 +27,20 @@
       <tbody>
       <tr v-for="techCardIngredient in newTechCard.techCardIngredients">
         <td>
-          <select v-model="techCardIngredient.ingredient.id" class="form-control">
-            <option v-for="ingredient in ingredients" :value="ingredient.id">{{ingredient.name}}</option>
+          <select v-model="techCardIngredient.ingredient" class="form-control">
+            <option v-for="ingredient in ingredients" :value="ingredient">{{ingredient.name}}</option>
           </select>
         </td>
         <td>
-          <input v-model.number="techCardIngredient.grossWeight" type="number" class="form-control">
+          <input v-model.number="techCardIngredient.grossWeight" type="number" class="form-control" @input="changeNetWeight($event, techCardIngredient)">
         </td>
         <td>
           <input v-model.number="techCardIngredient.netWeight" type="number" class="form-control">
         </td>
         <td>
-          {{techCardIngredient.price}}руб
+          <div v-if="techCardIngredient.ingredient.id !== null">
+            {{getIngredientPrice(techCardIngredient)}}руб
+          </div>
         </td>
       </tr>
       </tbody>
@@ -55,7 +57,9 @@
       <div class="header">
         Себестоимость
       </div>
-      <div class="body">0р</div>
+      <div class="body">
+        <div>{{selfPrice}}руб</div>
+      </div>
     </div>
     <div class="sign">+</div>
     <div class="price-block-item extra-price">
@@ -64,7 +68,7 @@
       </div>
       <div class="body">
         <div class="input">
-          <input v-model.number="extraPrice" type="number" id="extraPrice" class="form-control">
+          <input v-model.number="extraPrice" type="number" id="extraPrice" class="form-control" @input="calcTotalPrice">
         </div>
         <span>%</span>
       </div>

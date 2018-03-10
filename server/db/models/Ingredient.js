@@ -22,5 +22,9 @@ module.exports = {
   },
   lostBake: {
     type: Sequelize.INTEGER
+  },
+  supplyItemType: {
+    type: Sequelize.STRING,
+    defaultValue: 'ingredient',
   }
 }

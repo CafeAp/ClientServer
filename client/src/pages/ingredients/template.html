@@ -12,7 +12,7 @@
       <tr v-for="(ingredient, i) in ingredients">
         <td>{{ingredient.name}}</td>
         <td>{{ingredient.measure}}</td>
-        <td>{{ingredient.lost_clean}}%, {{ingredient.lost_boil}}%, {{ingredient.lost_fry}}%, {{ingredient.lost_stew}}%, {{ingredient.lost_bake}}%</td>
+        <td>{{ingredient.lostClean}}%, {{ingredient.lostBoil}}%, {{ingredient.lostFry}}%, {{ingredient.lostStew}}%, {{ingredient.lostBake}}%</td>
         <td>
           <i class="table-action fa fa-edit" @click="editIngredient(ingredient, i)"></i>
           <i class="table-action fa fa-remove" @click="deleteIngredient(ingredient, i)"></i>

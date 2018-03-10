@@ -14,5 +14,9 @@ module.exports = {
   },
   isWeighted: {
     type: Sequelize.BOOLEAN
+  },
+  supplyItemType: {
+    type: Sequelize.STRING,
+    defaultValue: 'goods',
   }
 }
