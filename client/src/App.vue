@@ -20,6 +20,14 @@
         <div class="collapse show" id="warehouse">
           <router-link to="/supplies">Поставки</router-link>
         </div>
+
+        <a href="#settings" class="menu-category" data-toggle="collapse">
+          <i class="fa fa-cogs"></i>
+          <span>Настройки</span>
+        </a>
+        <div class="collapse show" id="settings">
+          <router-link to="/settings/tables">Столы</router-link>
+        </div>
       </div>
     </div>
     <div class="right">

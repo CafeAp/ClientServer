@@ -25,6 +25,9 @@ import suppliesHeader from '@/pages/supplies/header/bundle.vue'
 import editSupply from '@/pages/edit_supply/bundle.vue'
 import editSupplyHeader from '@/pages/edit_supply/header/bundle.vue'
 
+import editTables from '@/pages/edit_tables/bundle.vue'
+import editTablesHeader from '@/pages/edit_tables/header/bundle.vue'
+
 Vue.use(Router);
 export default new Router({
   routes: [
@@ -86,6 +89,13 @@ export default new Router({
       components: {
         header: editSupplyHeader,
         body: editSupply
+      }
+    },
+    {
+      path: '/settings/tables',
+      components: {
+        header: editTablesHeader,
+        body: editTables
       }
     }
   ],

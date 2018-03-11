@@ -1,0 +1,44 @@
+<div class="edit-tables">
+  <div class="room">
+    <div class="tables" v-if="roomConfig && roomConfig.tables">
+      <vue-draggable-resizable
+        v-for="(table, tableIndex) in roomConfig.tables"
+        class="table"
+        :key="table.x + '' + table.y + '' + tableIndex"
+        :grid="[25,25]"
+        :parent="true"
+        :w="table.width"
+        :h="table.height"
+        :x="table.x"
+        :y="table.y"
+        @dragstop="(x, y) => handleTableDragging(table, x, y)"
+        @resizestop="(x, y, w, h) => handleTableResizing(table, x, y, w, h)">
+        <div class="name">
+          <input type="text"
+                 v-focus
+                 v-if="edittingTable === table"
+                 v-model="table.name"
+                 @keydown.enter="stopEditTableName">
+          <a v-else href="#" @click.stop="startEditTableName(table)">
+            {{table.name}}
+          </a>
+        </div>
+        <div class="delete" @click.stop="deleteTable(tableIndex)">
+          <i class="fa fa-remove"></i>
+        </div>
+      </vue-draggable-resizable>
+    </div>
+  </div>
+  <div class="actions clearfix">
+    <button class="btn btn-primary" @click="addNewTable">
+      <i class="fa fa-plus"></i>
+      Добавить стол
+    </button>
+    <button class="btn btn-primary" @click="saveRoomConfig">
+      <i class="fa fa-save"></i>
+      Сохранить
+    </button>
+    <div v-if="alertMessage === 'success'" class="alert alert-success">Конфигурация комнаты сохранена успешно</div>
+    <div v-if="alertMessage === 'error'" class="alert alert-danger">Ошибка при сохранении конфигурации комнаты</div>
+  </div>
+</div>

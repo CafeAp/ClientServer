@@ -13,6 +13,7 @@ var goods = require('./routes/goods');
 var techCards = require('./routes/tech_cards');
 var supplies = require('./routes/supplies');
 var warehouse = require('./routes/warehouse');
+var roomConfigs = require('./routes/room_configs');
 
 var app = express();
 var cors = require('cors')
@@ -36,6 +37,7 @@ app.use('/api/goods', goods);
 app.use('/api/tech_cards', techCards);
 app.use('/api/supplies', supplies);
 app.use('/api/warehouse', warehouse);
+app.use('/api/room_configs', roomConfigs);
 
 // catch 404 and forward to error handler
   app.use(function(req, res, next) {

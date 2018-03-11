@@ -20,6 +20,12 @@ sequelize.models.TechCardIngredient.Ingredient = sequelize.models.TechCardIngred
 sequelize.models.Supply.SupplyItem = sequelize.models.Supply.hasMany(sequelize.models.SupplyItem, {as: 'supplyItems'})
 sequelize.models.SupplyItem.Ingredient = sequelize.models.SupplyItem.belongsTo(sequelize.models.Ingredient, {as: 'ingredient'})
 sequelize.models.SupplyItem.Goods = sequelize.models.SupplyItem.belongsTo(sequelize.models.Goods, {as: 'goods'})
-sequelize.sync()
+
+sequelize.models.RoomConfig.hasMany(sequelize.models.TableConfig, {as: 'tables'})
+
+sequelize.sync().then(() => {
+  sequelize.models.RoomConfig.findOrCreate({where: {id: 1}})
+})
+
 module.exports = sequelize
 

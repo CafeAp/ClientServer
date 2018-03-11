@@ -20,6 +20,7 @@
     "lodash": "^4.17.5",
     "popper.js": "^1.12.9",
     "vue": "^2.5.2",
+    "vue-draggable-resizable": "^1.6.1",
     "vue-resource": "^1.4.0",
     "vue-router": "^3.0.1",
     "vue2-datepicker": "^1.8.3",

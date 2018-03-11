@@ -16,6 +16,10 @@ Vue.http.headers.common['Access-Control-Allow-Origin'] = '*'
 Vue.config.productionTip = false;
 /* eslint-disable no-new */
 
+Vue.config.keyCodes = {
+  enter: 13
+}
+
 new Vue({
   el: '#app',
   router,
