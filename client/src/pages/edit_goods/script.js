@@ -11,7 +11,8 @@ export default {
         price: 0,
         image: null,
         isWeighted: false
-      }
+      },
+      categories: null
     }
   },
   computed: {
@@ -26,6 +27,9 @@ export default {
     }
   },
   mounted() {
+    this.$http.get('api/categories/list').then(resp => {
+      this.categories = resp.body
+    })
     if (!this.isNew) {
       this.$http.get('api/goods/get', {params: {id: this.$route.params.id}}).then(resp => {
         this.$set(this, 'newGoods', resp.body)

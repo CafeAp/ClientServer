@@ -7,6 +7,12 @@ import ingredientsHeader from '@/pages/ingredients/header/bundle.vue'
 import editIngredient from '@/pages/edit_ingredient/bundle.vue'
 import editIngredientHeader from '@/pages/edit_ingredient/header/bundle.vue'
 
+import categories from '@/pages/categories/bundle.vue'
+import categoriesHeader from '@/pages/categories/header/bundle.vue'
+
+import editCategory from '@/pages/edit_category/bundle.vue'
+import editCategoryHeader from '@/pages/edit_category/header/bundle.vue'
+
 import goods from '@/pages/goods/bundle.vue'
 import goodsHeader from '@/pages/goods/header/bundle.vue'
 
@@ -28,12 +34,29 @@ import editSupplyHeader from '@/pages/edit_supply/header/bundle.vue'
 import editTables from '@/pages/edit_tables/bundle.vue'
 import editTablesHeader from '@/pages/edit_tables/header/bundle.vue'
 
+import terminalTables from '@/pages/terminal/tables/bundle.vue'
+import terminalTablesHeader from '@/pages/terminal/tables/header/bundle.vue'
+
+import terminalTable from '@/pages/terminal/table/bundle.vue'
+import terminalTableHeader from '@/pages/terminal/table/header/bundle.vue'
+
 Vue.use(Router);
 export default new Router({
+  mode: 'history',
   routes: [
     {
-      path: '/',
-      redirect: '/ingredients'
+      path: '/categories',
+      components: {
+        header: categoriesHeader,
+        body: categories
+      }
+    },
+    {
+      path: '/edit_category/:id?',
+      components: {
+        header: editCategoryHeader,
+        body: editCategory
+      }
     },
     {
       path: '/ingredients',
@@ -97,6 +120,24 @@ export default new Router({
         header: editTablesHeader,
         body: editTables
       }
+    },
+    {
+      path: '/terminal/tables',
+      components: {
+        header: terminalTablesHeader,
+        body: terminalTables
+      }
+    },
+    {
+      path: '/terminal/table/:tableId',
+      components: {
+        header: terminalTableHeader,
+        body: terminalTable
+      }
+    },
+    {
+      path: '/',
+      redirect: '/ingredients'
     }
   ],
 });

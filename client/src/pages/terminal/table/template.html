@@ -1,0 +1,122 @@
+<div class="terminal-table" v-if="table">
+  <div class="order">
+    <div class="table-wrapper">
+      <table class="table" v-if="table.activeOrder.orderItems">
+        <thead>
+        <tr>
+          <th>Наименование</th>
+          <th>Кол-во</th>
+          <th>Цена</th>
+          <th>Итого</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="orderItem in _sortBy(table.activeOrder.orderItems, 'createdAt')">
+          <td>{{orderItem[orderItem.techCard ? 'techCard' : 'goods'].name}}</td>
+          <td class="amount-cell">
+            <i class="fa fa-minus-square" @click="decreaseOrderItemAmount(orderItem)"></i>
+            <div class="amount">{{orderItem.amount}}</div>
+            <i class="fa fa-plus-square" @click="increaseOrderItemAmount(orderItem)"></i>
+          </td>
+          <td>{{orderItem[orderItem.techCard ? 'techCard' : 'goods'].price}}</td>
+          <td>{{orderItem[orderItem.techCard ? 'techCard' : 'goods'].price * orderItem.amount}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="footer clearfix">
+      <div class="total">
+        <div class="name">Итого:</div>
+        <div class="sum">{{_sumBy(table.activeOrder.orderItems, d => d[d.techCard ? 'techCard' : 'goods'].price * d.amount)}}</div>
+      </div>
+      <div class="actions">
+        <i class="fa fa-print" @click="callPrint('print-content')"></i>
+        <button class="btn btn-primary" @click="closeTable">Закрыть стол</button>
+      </div>
+    </div>
+  </div>
+  <div class="menu">
+    <ol class="breadcrumb">
+      <li :class="['breadcrumb-item', {active: breadcrumbs.length === 0}]"
+          @click="handleHomeBreadcrumbClick">
+        <span v-if="breadcrumbs.length === 0">Начало</span>
+        <a href="#" v-else>Начало</a>
+      </li>
+      <li v-for="(breadcrumb, i) in breadcrumbs"
+          :class="['breadcrumb-item', {active: _last(breadcrumbs) === breadcrumb}]"
+          @click="handleBreadcrumbClick(breadcrumb, i)">
+        <span v-if="_last(breadcrumbs) === breadcrumb">{{breadcrumb.name}}</span>
+        <a href="#" v-else>{{breadcrumb.name}}</a>
+      </li>
+    </ol>
+    <div class="menu-items">
+      <category v-for="category in currentCategories"
+                :category="category"
+                :parentCategory="_last(breadcrumbs)"
+                @clickCategory="showSubCategories">
+      </category>
+      <div v-for="techCard in getTechCardsByCategory(parentCategory)"
+           v-if="(!parentCategory && !techCard.category) || (parentCategory && techCard.category && techCard.category.id === parentCategory.id)"
+           class="card item-card"
+           @click="addTechCardToOrder(techCard)">
+        <div :style="{'background-image': `url(${techCard.image})`}" class="card-img-top"></div>
+        <div class="card-body">
+          <div class="name">{{techCard.name}}</div>
+          <div class="price">{{techCard.price}}р</div>
+        </div>
+      </div>
+      <div v-for="goods in getGoodsByCategory(parentCategory)"
+           v-if="(!parentCategory && !goods.category) || (parentCategory && goods.category && goods.category.id === parentCategory.id)"
+           class="card item-card"
+           @click="addGoodsToOrder(goods)">
+        <div :style="{'background-image': `url(${goods.image})`}" class="card-img-top"></div>
+        <div class="card-body">
+          <div class="name">{{goods.name}}</div>
+          <div class="price">{{goods.price}}р</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="print-content">
+    <div class="common-info" :style="{'margin-bottom': '10px'}">
+      <div class="line" :style="{'margin-bottom': '5px'}">
+        <div :style="{'width': '100px', display: 'inline-block'}">Дата: </div>
+        <span>{{new Date().toLocaleString()}}</span>
+      </div>
+      <div class="line">
+        <div :style="{'width': '100px', display: 'inline-block'}">Стол №: </div>
+        <span>{{table.name}}</span>
+      </div>
+    </div>
+    <div class="check" :style="{width: '350px', 'border': 'dashed lightgrey', 'border-width': '3px 0', padding: '10px 0'}">
+      <table :style="{margin: '0 0 0 -4px', padding: '0'}">
+        <thead>
+          <tr>
+            <th :style="{padding: '2px 10px 2px 0'}">Наименование</th>
+            <th :style="{padding: '2px 10px'}">Кол-во</th>
+            <th :style="{padding: '2px 10px'}">Цена</th>
+            <th :style="{padding: '2px 10px'}">Итого</th>
+          </tr>
+        </thead>
+        <body>
+          <tr v-for="orderItem in _sortBy(table.activeOrder.orderItems, 'createdAt')">
+            <td :style="{padding: '2px 10px 2px 0'}">{{orderItem[orderItem.techCard ? 'techCard' : 'goods'].name}}</td>
+            <td :style="{padding: '2px 10px'}">{{orderItem.amount}}</td>
+            <td :style="{padding: '2px 10px'}">{{orderItem[orderItem.techCard ? 'techCard' : 'goods'].price}}</td>
+            <td :style="{padding: '2px 10px'}">{{orderItem[orderItem.techCard ? 'techCard' : 'goods'].price * orderItem.amount}}</td>
+          </tr>
+        </body>
+      </table>
+    </div>
+    <div class="footer" :style="{'margin-top': '10px'}">
+      <div class="total">
+        <div :style="{'width': '100px', display: 'inline-block'}">Итого:</div>
+        <span :style="{'font-size': '20px'}"><b>{{_sumBy(table.activeOrder.orderItems, d => d[d.techCard ? 'techCard' : 'goods'].price * d.amount)}}руб</b></span>
+      </div>
+    </div>
+    <div class="wish" :style="{margin: '40px 0'}">
+      Будем рады снова видеть вас в нашем заведении!
+    </div>
+  </div>
+</div>

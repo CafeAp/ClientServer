@@ -1,5 +1,5 @@
 import VueDraggableResizable from 'vue-draggable-resizable'
-import newTableConfigTPL from '@/assets/model_templates/new_table_config.tpl.js'
+import newTableTPL from '@/assets/model_templates/new_table.tpl.js'
 import _cloneDeep from 'lodash/cloneDeep'
 import _last from 'lodash/last'
 import {mapGetters} from 'vuex'
@@ -11,13 +11,13 @@ export default {
   },
   data() {
     return {
-      roomConfig: null,
+      room: null,
       edittingTable: null
     }
   },
   created() {
-    this.$http.get('api/room_configs/get').then(resp => {
-      this.roomConfig = resp.body[0]
+    this.$http.get('api/rooms/list').then(resp => {
+      this.room = resp.body[0]
     })
   },
   computed: {
@@ -27,12 +27,12 @@ export default {
   },
   methods: {
     addNewTable() {
-      let newTable = _cloneDeep(newTableConfigTPL)
-      newTable.name = this.roomConfig.tables.length + 1
-      this.roomConfig.tables.push(newTable)
+      let newTable = _cloneDeep(newTableTPL)
+      newTable.name = this.room.tables.length + 1
+      this.room.tables.push(newTable)
     },
     deleteTable(tableIndex) {
-      this.roomConfig.tables.splice(tableIndex, 1)
+      this.room.tables.splice(tableIndex, 1)
     },
     handleTableDragging(table, x, y) {
       table.x = x
@@ -45,7 +45,7 @@ export default {
       table.height = h
     },
     saveRoomConfig() {
-      this.$http.post('api/room_configs/edit', this.roomConfig).then(resp => {
+      this.$http.post('api/rooms/edit', this.room).then(resp => {
         this.$store.dispatch('setAlertMessageForTime', 'success')
       }, () => {
         this.$store.dispatch('setAlertMessageForTime', 'error')

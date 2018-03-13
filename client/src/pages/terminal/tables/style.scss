@@ -1,0 +1,49 @@
+@import '../../../assets/styles/variables.scss';
+
+.terminal-tables {
+  height: 100%;
+  padding: 10px;
+  .room {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .tables {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      .table {
+        position: absolute;
+        background: grey;
+        cursor: pointer;
+        transition: opacity .2s;
+        .dropdown-toggle {
+          width: 100%;
+          height: 100%;
+        }
+        &:hover {
+          opacity: .7;
+        }
+        &.opened {
+          background: $c-interactive;
+        }
+        .name {
+          width: 100%;
+          height: 25px;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          text-align: center;
+          margin: auto;
+          font-size: 25px;
+          color: #fff;
+        }
+        .guests-count-selector {
+          width: 200px;
+          height: 300px;
+          overflow: auto;
+          background: #fff;
+        }
+      }
+    }
+  }
+}

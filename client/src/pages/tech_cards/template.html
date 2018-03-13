@@ -20,7 +20,7 @@
           </div>
           {{techCard.name}}
         </td>
-        <td>{{techCard.category}}</td>
+        <td>{{techCard.category ? techCard.category.name : null}}</td>
         <td>
           <a href="#" @click="toggleComposition(techCard.id)">{{!cardsIdsWithShownComposition.includes(techCard.id) ? 'посмотреть состав' : 'скрыть состав'}}</a>
           <ul v-if="cardsIdsWithShownComposition.includes(techCard.id)">

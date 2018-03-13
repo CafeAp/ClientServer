@@ -17,10 +17,9 @@ router.get('/get', (req, res) => {
 
 router.post('/add', (req, res) => {
   sequelize.models.TechCard.create(req.body, {
-    include: {
-      association: sequelize.models.TechCard.TechCardIngredients
-    },
+    include: [sequelize.models.TechCard.TechCardIngredients],
   }).then(techCard => {
+    if (req.body.category) techCard.setCategory(req.body.category.id)
     techCard.techCardIngredients.forEach((techCardIngredient, i) => {
       techCardIngredient.update({ingredientId: req.body.techCardIngredients[i].ingredient.id}, {fields: ['ingredientId']})
     })
@@ -31,6 +30,7 @@ router.post('/add', (req, res) => {
 router.post('/edit', (req, res) => {
   sequelize.models.TechCard.findById(req.body.id).then(techCard => {
     techCard.update(req.body).then(updatedTechCard => {
+      updatedTechCard.setCategory(req.body.category ? req.body.category.id : null)
       res.send(updatedTechCard.get());
     }, res.send)
   }, res.send)

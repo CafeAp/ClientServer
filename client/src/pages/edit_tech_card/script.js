@@ -18,13 +18,9 @@ export default {
         techCardIngredients: []
       },
       extraPrice: 0,
-      warehouse: null
+      warehouse: null,
+      categories: null
     }
-  },
-  mounted() {
-    this.$http.get('api/ingredients/list').then(resp => {
-      this.ingredients = resp.body
-    })
   },
   computed: {
     ...mapGetters({
@@ -53,6 +49,12 @@ export default {
     }
   },
   created() {
+    this.$http.get('api/categories/list').then(resp => {
+      this.categories = resp.body
+    })
+    this.$http.get('api/ingredients/list').then(resp => {
+      this.ingredients = resp.body
+    })
     this.$http.get('api/warehouse/get', {params: {id: this.$route.params.id}}).then(resp => {
       this.warehouse = resp.body
     })

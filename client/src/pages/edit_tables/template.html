@@ -1,8 +1,8 @@
 <div class="edit-tables">
   <div class="room">
-    <div class="tables" v-if="roomConfig && roomConfig.tables">
+    <div class="tables" v-if="room && room.tables">
       <vue-draggable-resizable
-        v-for="(table, tableIndex) in roomConfig.tables"
+        v-for="(table, tableIndex) in room.tables"
         class="table"
         :key="table.x + '' + table.y + '' + tableIndex"
         :grid="[25,25]"
@@ -38,7 +38,7 @@
       <i class="fa fa-save"></i>
       Сохранить
     </button>
-    <div v-if="alertMessage === 'success'" class="alert alert-success">Конфигурация комнаты сохранена успешно</div>
-    <div v-if="alertMessage === 'error'" class="alert alert-danger">Ошибка при сохранении конфигурации комнаты</div>
+    <div v-if="alertMessage === 'success'" class="alert alert-success">Расстановка столов сохранена успешно</div>
+    <div v-if="alertMessage === 'error'" class="alert alert-danger">Ошибка при сохранении расстановки столов</div>
   </div>
 </div>

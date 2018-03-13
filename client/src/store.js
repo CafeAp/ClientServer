@@ -4,7 +4,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    alertMessage: null
+    alertMessage: null,
+    breadcrumbs: []
   },
   mutations: {
     setAlertMessage(state, mes) {
@@ -12,7 +13,8 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    alertMessage: state => state.alertMessage
+    alertMessage: state => state.alertMessage,
+    breadcrumbs: state => state.breadcrumbs
   },
   actions: {
     setAlertMessageForTime(store, mes) {

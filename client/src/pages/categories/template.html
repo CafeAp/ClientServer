@@ -1,0 +1,32 @@
+<div class="categories-block">
+  <table class="table-sm table-bordered categories-table">
+    <thead>
+      <tr>
+        <th>Название</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(category, i) in sortedCategories"
+          v-if="!category.parentCategory || !!expandedCategories.find(c => c.id === category.parentCategory.id)"
+          @click="toggleCategory(category)">
+        <td>
+          <div class="indenter" v-for="i in getIndentersCount(category)"></div>
+          <div class="indenter" v-if="category.subCategories.length === 0"></div>
+          <div class="expand-button" v-if="category.subCategories !== undefined && category.subCategories.length !== 0">
+            <i class="fa fa-angle-down" v-if="expandedCategories.includes(category)"></i>
+            <i class="fa fa-angle-right" v-else></i>
+          </div>
+          <div class="table-row-image">
+            <img :src="category.image" class="table-row-image">
+          </div>
+          {{category.name}}
+        </td>
+        <td>
+          <i class="table-action fa fa-edit" @click="editCategory(category, i)"></i>
+          <i class="table-action fa fa-remove" @click="deleteCategory(category, i)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

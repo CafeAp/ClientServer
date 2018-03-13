@@ -8,12 +8,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
+var categories = require('./routes/categories');
 var ingredients = require('./routes/ingredients');
 var goods = require('./routes/goods');
 var techCards = require('./routes/tech_cards');
 var supplies = require('./routes/supplies');
 var warehouse = require('./routes/warehouse');
-var roomConfigs = require('./routes/room_configs');
+var rooms = require('./routes/rooms');
+var tables = require('./routes/tables');
 
 var app = express();
 var cors = require('cors')
@@ -32,12 +34,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
 app.use('/', index);
+app.use('/api/categories', categories);
 app.use('/api/ingredients', ingredients);
 app.use('/api/goods', goods);
 app.use('/api/tech_cards', techCards);
 app.use('/api/supplies', supplies);
 app.use('/api/warehouse', warehouse);
-app.use('/api/room_configs', roomConfigs);
+app.use('/api/rooms', rooms);
+app.use('/api/tables', tables);
 
 // catch 404 and forward to error handler
   app.use(function(req, res, next) {

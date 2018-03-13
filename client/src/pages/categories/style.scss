@@ -1,0 +1,32 @@
+@import '../../assets/styles/variables.scss';
+.categories-table {
+  tr {
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+      background: fade_out($c-interactive, 0.95);
+      .expand-button {
+        opacity: 1;
+      }
+    }
+  }
+  .indenter {
+    display: inline-block;
+    width: 25px;
+    height: 1px;
+  }
+}
+
+.expand-button {
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  margin-right: 5px;
+  text-align: center;
+  cursor: pointer;
+  opacity: .5;
+  transition: opacity .2s;
+  i.fa {
+    font-size: 25px;
+  }
+}

@@ -1,0 +1,13 @@
+<div class="terminal-tables">
+  <div class="room">
+    <div class="tables" v-if="room && room.tables">
+      <div v-for="(table, tableIndex) in room.tables"
+        :class="['table', {opened: table.status === 'opened'}]"
+        :key="table.x + '' + table.y + '' + tableIndex"
+        :style="getTableStyles(table)"
+        @click="openTable(table)">
+        <div class="name">{{table.name}}</div>
+      </div>
+    </div>
+  </div>
+</div>

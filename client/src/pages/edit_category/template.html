@@ -1,0 +1,24 @@
+<div class="edit-category">
+  <form class="edit-item-form">
+    <div class="form-group">
+      <label for="name">Название</label>
+      <input v-focus v-model="newCategory.name" type="text" id="name" class="form-control">
+    </div>
+    <div class="form-group" v-if="categories !== null && categories.length > 0">
+      <label for="parent">Родительская категория</label>
+      <select v-model="newCategory.parentCategory" id="parent" class="form-control">
+        <option :value="null"></option>
+        <option v-for="category in filteredCategories" v-if="newCategory !== category" :value="category">{{category.name}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="photo">Фотография</label>
+      <input type="file" id="photo" class="form-control-file" @change="loadImage($event)">
+    </div>
+  </form>
+  <div class="buttons">
+    <button v-if="alertMessage === null" class="btn btn-primary" :disabled="!validForm" @click="saveCategory">Сохранить</button>
+    <div v-else-if="alertMessage === 'success'" class="alert alert-success">Категория добавлена успешно</div>
+    <div v-else-if="alertMessage === 'error'" class="alert alert-danger">Ошибка при добавлении категории</div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="category item-card" @click="emitClickCategory">
+  <div class="card">
+    <div :style="{'background-image': `url(${category.image})`}" class="card-img-top"></div>
+    <div class="card-body">
+      {{category.name}}
+    </div>
+  </div>
+</div>

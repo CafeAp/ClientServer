@@ -1,7 +1,16 @@
 <template>
   <div id="app">
     <div class="left">
+
       <div class="menu">
+        <a href="#terminal" class="menu-category" data-toggle="collapse">
+          <i class="fa fa-laptop"></i>
+          <span>Терминал</span>
+        </a>
+        <div class="collapse show" id="terminal">
+          <router-link to="/terminal/tables">Открыть терминал</router-link>
+        </div>
+
         <a href="#menu" class="menu-category" data-toggle="collapse">
           <i class="fa fa-file"></i>
           <span>Меню</span>
@@ -10,7 +19,7 @@
           <router-link to="/goods">Товары</router-link>
           <router-link to="/tech_cards">Тех карты</router-link>
           <router-link to="/ingredients">Ингредиенты</router-link>
-          <router-link to="/goods_categories">Категории товаров и тех карт</router-link>
+          <router-link to="/categories">Категории товаров и тех карт</router-link>
         </div>
 
         <a href="#warehouse" class="menu-category" data-toggle="collapse">
@@ -85,6 +94,9 @@
       text-decoration: none;
       &:hover {
         color: $f-color;
+      }
+      i.fa {
+        width: 15px;
       }
     }
     .collapse,

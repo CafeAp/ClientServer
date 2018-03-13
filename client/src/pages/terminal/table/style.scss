@@ -1,0 +1,131 @@
+@import '../../../assets/styles/variables.scss';
+
+.terminal-table {
+  height: 100%;
+  .order,
+  .menu {
+    height: 100%;
+  }
+  .order {
+    float: left;
+    width: 500px;
+    border-right: 1px solid lightgrey;
+    padding-right: 10px;
+    .table-wrapper {
+      height: calc(100% - 49px);
+      overflow: auto;
+      tr:hover {
+        .amount-cell {
+          .fa {
+            opacity: 1;
+          }
+        }
+      }
+      .amount-cell {
+        .fa, .amount {
+          display: inline-block;
+          vertical-align: middle;
+        }
+        .amount {
+          margin:0 2px;
+        }
+        .fa {
+          font-size: 25px;
+          color: $c-interactive;
+          cursor: pointer;
+          opacity: 0;
+          transition: opacity .2s;
+          &:hover {
+            opacity: .5;
+          }
+        }
+      }
+    }
+    .footer {
+      border-top: 1px solid lightgrey;
+      padding-top: 10px;
+      .total,
+      .actions {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .total {
+        margin-top: 8px;
+        .name,
+        .sum {
+          display: inline-block;
+        }
+        .name {
+          margin-left: 12px;
+        }
+        .sum {
+          font-weight: bold;
+          margin-left: 10px;
+        }
+      }
+      .actions {
+        float: right;
+        .fa-print {
+          margin-right: 5px;
+          font-size: 26px;
+          padding: 5px;
+          border-radius: 5px;
+          vertical-align: middle;
+          border: 1px solid $c-interactive;
+          color: $c-interactive;
+          cursor: pointer;
+          transition: color .2s;
+          &:hover {
+            color: $c-interactive-hover;
+            border-color: $c-interactive-hover;
+          }
+        }
+      }
+    }
+  }
+  .menu {
+    width: calc(100% - 510px);
+    margin-left: 510px;
+    .menu-items {
+      height: calc(100% - 64px);
+      overflow: auto;
+    }
+    .item-card {
+      display: inline-block;
+      margin-bottom: 5px;
+      cursor: pointer;
+      .card-img-top {
+        width: 100%;
+        height: 100px;
+        background-size: cover;
+      }
+      &:not(:nth-child(4n)) {
+        width: calc(25% - 5px);
+        margin-right: 5px;
+      }
+      &:nth-child(4n) {
+        width: 25%;
+      }
+      .card-body {
+        padding: 5px 10px;
+        .name,
+        .price {
+          display: inline-block;
+          vertical-align: middle;
+          height: 25px;
+          line-height: 25px;
+        }
+        .price {
+          float: right;
+          font-size: $f-size - 2px;
+          font-weight: bold;
+          color: #bbb;
+        }
+      }
+    }
+  }
+}
+
+#print-content {
+  display: none;
+}
