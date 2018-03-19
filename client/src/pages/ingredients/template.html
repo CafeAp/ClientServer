@@ -1,8 +1,9 @@
 <div class="ingredients-block">
-  <table class="table-sm table-bordered">
+  <table class="table-sm table-bordered" v-if="warehouse">
     <thead>
       <tr>
         <th>Название</th>
+        <th>Остаток на складе</th>
         <th>Ед. измерения</th>
         <th>Потери</th>
         <th></th>
@@ -11,6 +12,7 @@
     <tbody>
       <tr v-for="(ingredient, i) in ingredients">
         <td>{{ingredient.name}}</td>
+        <td>{{warehouseMap[ingredient.name].amount}}{{ingredient.measure}}</td>
         <td>{{ingredient.measure}}</td>
         <td>{{ingredient.lostClean}}%, {{ingredient.lostBoil}}%, {{ingredient.lostFry}}%, {{ingredient.lostStew}}%, {{ingredient.lostBake}}%</td>
         <td>

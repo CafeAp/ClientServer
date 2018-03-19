@@ -40,6 +40,9 @@ import terminalTablesHeader from '@/pages/terminal/tables/header/bundle.vue'
 import terminalTable from '@/pages/terminal/table/bundle.vue'
 import terminalTableHeader from '@/pages/terminal/table/header/bundle.vue'
 
+import orders from '@/pages/orders/bundle.vue'
+import ordersHeader from '@/pages/orders/header/bundle.vue'
+
 Vue.use(Router);
 export default new Router({
   mode: 'history',
@@ -133,6 +136,13 @@ export default new Router({
       components: {
         header: terminalTableHeader,
         body: terminalTable
+      }
+    },
+    {
+      path: '/orders',
+      components: {
+        header: ordersHeader,
+        body: orders
       }
     },
     {

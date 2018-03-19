@@ -10,8 +10,8 @@
     </thead>
     <tbody>
       <tr v-for="(supply, i) in supplies">
-        <td>{{supply.date}}</td>
-        <td>{{supply.supplyItems.map(g => `${getConcreteSupplyItem(g).name}(${g.amount}${g.packaging || ''})`).join(', ')}}</td>
+        <td>{{formatDate(supply.date)}}</td>
+        <td>{{supply.supplyItems.map(g => `${getConcreteSupplyItem(g).name}(${g.amount}${getConcreteSupplyItem(g).measure})`).join(', ')}}</td>
         <td>{{_sumBy(supply.supplyItems, 'totalPrice')}}</td>
         <td>
           <i class="table-action fa fa-edit" @click="editSupply(supply, i)"></i>

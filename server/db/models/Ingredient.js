@@ -26,5 +26,8 @@ module.exports = {
   supplyItemType: {
     type: Sequelize.STRING,
     defaultValue: 'ingredient',
+  },
+  averagePrice: {
+    type: Sequelize.INTEGER
   }
 }

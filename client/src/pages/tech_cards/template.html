@@ -28,7 +28,7 @@
           </ul>
         </td>
         <td>{{_sumBy(techCard.techCardIngredients, 'netWeight')}}г</td>
-        <td></td>
+        <td>{{Math.round(_sumBy(techCard.techCardIngredients, d => d.ingredient.averagePrice * d.grossWeight))}}р</td>
         <td>{{techCard.price}}р</td>
         <td>
           <i class="table-action fa fa-edit" @click="editTechCard(techCard, i)"></i>

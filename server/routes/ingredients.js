@@ -17,6 +17,18 @@ router.get('/get', (req, res) => {
 
 router.post('/add', (req, res) => {
   sequelize.models.Ingredient.create(req.body).then(ingredient => {
+    sequelize.models.WarehouseItem.create(
+      {
+        name: ingredient.getDataValue('name'),
+        entityId: ingredient.getDataValue('id'),
+        type: 'ingredient',
+        amount: 0
+      }
+    ).then(warehouseItem => {
+      sequelize.models.Warehouse.findById('1').then(warehouse => {
+        warehouse.addWarehouseItem(warehouseItem.getDataValue('id'))
+      })
+    })
     res.send(ingredient);
   }, res.send);
 });

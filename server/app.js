@@ -16,8 +16,11 @@ var supplies = require('./routes/supplies');
 var warehouse = require('./routes/warehouse');
 var rooms = require('./routes/rooms');
 var tables = require('./routes/tables');
+var orders = require('./routes/orders');
+var warehouse = require('./routes/warehouse');
 
 var app = express();
+require('run-middleware')(app)
 var cors = require('cors')
 var sequelize = require('./db/sequelize.js')
 // view engine setup
@@ -42,6 +45,8 @@ app.use('/api/supplies', supplies);
 app.use('/api/warehouse', warehouse);
 app.use('/api/rooms', rooms);
 app.use('/api/tables', tables);
+app.use('/api/orders', orders);
+app.use('/api/warehouse', warehouse);
 
 // catch 404 and forward to error handler
   app.use(function(req, res, next) {

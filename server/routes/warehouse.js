@@ -3,54 +3,43 @@ const express = require('express'),
   router = express.Router(),
   _concat = require('lodash/concat'),
   _cloneDeep = require('lodash/cloneDeep'),
-  _sumBy = require('lodash/sumBy')
+  _sumBy = require('lodash/sumBy'),
+  _sum = require('lodash/sum'),
+  _flatten = require('lodash/flatten')
 
 router.get('/get', (req, res) => {
-  let ingredientsPromise,
-    goodsPromise,
-    ingredients,
-    goods
-  ingredientsPromise = new Promise(resolve => {
-    sequelize.models.Ingredient.all(
-      {
-        raw: true
-      }
-    ).then(ingredientsRows => {
-      ingredients = ingredientsRows
-      resolve()
-    });
-  })
-  goodsPromise = new Promise(resolve => {
-    sequelize.models.Goods.all({raw: true}).then(goodsRows => {
-      goods = goodsRows
-      resolve()
-    })
-  })
-  Promise.all([ingredientsPromise, goodsPromise]).then(() => {
-    let warehouseItems = _concat(ingredients, goods),
-      warehouse = [],
-      promises = []
-    warehouseItems.forEach(warehouseItem => {
-      let itemInfo = _cloneDeep(warehouseItem)
-      itemInfo.metrics = {}
+  sequelize.models.Warehouse.findById('1', {include: [{all: true, nested: true}] }).then(warehouse => {
+    let promises = [],
+      warehouseData = warehouse.get()
+      warehouse.warehouseItems.forEach((warehouseItem, i) => {
+      let warehouseItemData = warehouseItem.get(),
+        prices = [],
+        amounts = []
       promises.push(new Promise(resolve => {
-        sequelize.models.SupplyItem.all(
+        sequelize.models.SupplyItem.findAll(
           {
-            where: {[`${warehouseItem.supplyItemType}Id`]: warehouseItem.id},
-            raw: true,
-            include: [{all: true}]
+            order: [['updatedAt', 'DESC']],
+            where: {
+              [`${warehouseItemData.type}Id`]: warehouseItemData.entityId,
+            },
+            limit: 100,
+            include: {all: true, nested: true}
           }
-        ).then(supplyItemsData => {
-          itemInfo.metrics.totalAmount = _sumBy(supplyItemsData, 'amount')
-          itemInfo.metrics.totalPrice = _sumBy(supplyItemsData, 'totalPrice')
-          itemInfo.metrics.averagePrice = (itemInfo.metrics.totalPrice / itemInfo.metrics.totalAmount) / 1000
-          warehouse.push(itemInfo)
+        ).then(supplyItems => {
+          let i = 0
+          while (_sum(amounts) < warehouseItem.amount) {
+            let sumAmounts = _sum(amounts),
+              amount = sumAmounts + supplyItems[i].amount < warehouseItem.amount ? supplyItems[i].amount : warehouseItem.amount - sumAmounts
+            amounts.push(amount)
+            prices.push(supplyItems[i].getDataValue('totalPrice'))
+          }
+          warehouseData.warehouseItems[i].averagePrice = _sum(prices.map((p, i) => p * amounts[i])) / _sum(amounts)
           resolve()
         })
       }))
     })
     Promise.all(promises).then(() => {
-      res.send(warehouse)
+      res.send(warehouseData)
     })
   })
 })

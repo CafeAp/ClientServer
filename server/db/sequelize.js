@@ -33,12 +33,15 @@ sequelize.models.Order.OrderItem = sequelize.models.Order.hasMany(sequelize.mode
 sequelize.models.OrderItem.belongsTo(sequelize.models.TechCard, {as: 'techCard'})
 sequelize.models.OrderItem.belongsTo(sequelize.models.Goods, {as: 'goods'})
 
-sequelize.sync().then(() => {
-  sequelize.models.Room.findOrCreate({where: {id: 1}})
-  sequelize.models.Category.create({name: 'Мясные'})
-  sequelize.models.Category.create({name: 'Напитки'})
-  sequelize.models.TechCard.create({name: 'Шашлык', categoryId: 1, price: 100})
-  sequelize.models.Goods.create({name: 'Кока-кола', categoryId: 2, price: 50})
+sequelize.models.Warehouse.hasMany(sequelize.models.WarehouseItem, {as: 'warehouseItems'})
+
+sequelize.sync().then(async () => {
+  await sequelize.models.Warehouse.findOrCreate({where: {id: 1}})
+  await sequelize.models.Room.findOrCreate({where: {id: 1}})
+  // await sequelize.models.Category.create({name: 'Мясные'})
+  // await sequelize.models.Category.create({name: 'Напитки'})
+  // await sequelize.models.TechCard.create({name: 'Шашлык', categoryId: 1, price: 100})
+  // await sequelize.models.Goods.create({name: 'Кока-кола', categoryId: 2, price: 50})
 })
 
 module.exports = sequelize

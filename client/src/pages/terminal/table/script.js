@@ -16,7 +16,8 @@ export default {
       techCards: null,
       goods: null,
       currentCategories: null,
-      breadcrumbs: []
+      breadcrumbs: [],
+      isMenuBlocked: false
     }
   },
   mounted() {
@@ -69,32 +70,68 @@ export default {
       this.currentCategories = this.categories
       this.breadcrumbs = []
     },
+    blockMenu() {
+      this.isMenuBlocked = true
+    },
+    unblockMenu() {
+      this.isMenuBlocked = false
+    },
     addGoodsToOrder(goods) {
+      if (this.isMenuBlocked) return false
       let sameOrderItem = this.table.activeOrder.orderItems.find(d => d.goods && d.goods.id === goods.id)
       if (sameOrderItem) {
         this.increaseOrderItemAmount(sameOrderItem)
         return false
       }
-      this.table.activeOrder.orderItems.push({goods, amount: 1})
-      this.sendUpdateTableReq()
+      this.blockMenu()
+      this.$http.post('api/orders/orderItem/add', {order: this.table.activeOrder, orderItem: {goods, amount: 1}}).then(resp => {
+        this.unblockMenu()
+        this.table.activeOrder = resp.body
+      })
     },
     addTechCardToOrder(techCard) {
+      if (this.isMenuBlocked) return false
       let sameOrderItem = this.table.activeOrder.orderItems.find(d => d.techCard && d.techCard.id === techCard.id)
       if (sameOrderItem) {
         this.increaseOrderItemAmount(sameOrderItem)
         return false
       }
-      this.table.activeOrder.orderItems.push({techCard, amount: 1})
-      this.sendUpdateTableReq()
+      this.blockMenu()
+      this.$http.post('api/orders/orderItem/add', {order: this.table.activeOrder, orderItem: {techCard, amount: 1}}).then(resp => {
+        this.unblockMenu()
+        this.table.activeOrder = resp.body
+      })
     },
     increaseOrderItemAmount(orderItem) {
-      orderItem.amount++
-      this.sendUpdateTableReq()
+      if (this.isMenuBlocked) return false
+      this.blockMenu()
+      this.$http.post('api/orders/orderItem/increaseAmount', orderItem).then(resp => {
+        this.unblockMenu()
+        let orderItems = this.table.activeOrder.orderItems
+        orderItems.splice(orderItems.indexOf(orderItem), 1, resp.body)
+      })
     },
     decreaseOrderItemAmount(orderItem) {
-      orderItem.amount--
-      if (orderItem.amount === 0) this.table.activeOrder.orderItems.splice(this.table.activeOrder.orderItems.indexOf(orderItem), 1)
-      this.sendUpdateTableReq()
+      if (this.isMenuBlocked) return false
+      if (orderItem.amount === 1) {
+        this.deleteOrderItem(orderItem)
+        return false
+      }
+      this.blockMenu()
+      this.$http.post('api/orders/orderItem/decreaseAmount', orderItem).then(resp => {
+        this.unblockMenu()
+        let orderItems = this.table.activeOrder.orderItems
+        orderItems.splice(orderItems.indexOf(orderItem), 1, resp.body)
+      })
+    },
+    deleteOrderItem(orderItem) {
+      if (this.isMenuBlocked) return false
+      this.blockMenu()
+      this.$http.post('api/orders/orderItem/delete', orderItem).then(resp => {
+        this.unblockMenu()
+        let orderItems = this.table.activeOrder.orderItems
+        orderItems.splice(orderItems.indexOf(orderItem), 1)
+      })
     },
     sendUpdateTableReq(table, needRefreshClientModel = true) {
       return new Promise(resolve => {

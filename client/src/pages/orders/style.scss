@@ -1,0 +1,13 @@
+@import '../../assets/styles/variables.scss';
+
+.no-free-tables-message {
+  padding: 0 10px;
+  color: $c-danger;
+}
+
+.active-table-message {
+  width: 220px;
+  padding: 2px;
+  margin: 0;
+  text-align: center;
+}

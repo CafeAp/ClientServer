@@ -35,15 +35,6 @@ export default {
     exitWeight() {
       return _sumBy(this.newTechCard.techCardIngredients, 'netWeight')
     },
-    warehouseMap() {
-      let obj = {}
-      this.warehouse.forEach(d => {
-        if (d.supplyItemType === 'ingredient') {
-          obj[d.name] = d
-        }
-      })
-      return obj
-    },
     selfPrice() {
       return _sum(this.newTechCard.techCardIngredients.map(d => this.getIngredientPrice(d)))
     }
@@ -61,6 +52,7 @@ export default {
     if (!this.isNew) {
       this.$http.get('api/tech_cards/get', {params: {id: this.$route.params.id}}).then(resp => {
         this.$set(this, 'newTechCard', resp.body)
+        this.extraPrice = (resp.body.price / _sumBy(resp.body.techCardIngredients, d => d.ingredient.averagePrice * d.grossWeight) - 1) * 100
       })
     }
   },
@@ -90,13 +82,13 @@ export default {
     },
     getIngredientPrice: function (techCardIngredient) {
       if (techCardIngredient.ingredient.id === null) return 0
-      return Math.ceil(this.warehouseMap[techCardIngredient.ingredient.name].metrics.averagePrice * techCardIngredient.grossWeight)
+      return Math.ceil(techCardIngredient.ingredient.averagePrice * techCardIngredient.grossWeight)
     },
     calcTotalPrice: function () {
       this.newTechCard.price = this.selfPrice + Math.ceil(this.selfPrice * (this.extraPrice * 0.01))
     },
     calcExtraPrice: function () {
-      this.extraPrice = Math.ceil((this.newTechCard.price / this.selfPrice) * 0.01)
+      this.extraPrice = Math.round((this.newTechCard.price / this.selfPrice - 1) * 100)
     }
   },
   watch: {

@@ -30,6 +30,7 @@ export default {
     }
   },
   mounted() {
+    this.newSupply.date = Date.now()
     this.$http.get('api/ingredients/list').then(resp => {
       this.concreteSupplyItems = _concat(this.concreteSupplyItems, resp.body.map(d => {
         return {

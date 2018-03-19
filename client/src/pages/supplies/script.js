@@ -1,4 +1,6 @@
 import _sumBy from 'lodash/sumBy'
+import utils from '@/assets/utils'
+
 export default {
   name: 'supplies',
   data () {
@@ -13,6 +15,7 @@ export default {
   },
   methods: {
     _sumBy,
+    formatDate: utils.formatDate,
     editSupply(supply, i) {
       this.$router.push(`/edit_supply/${supply.id}`)
     },

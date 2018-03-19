@@ -9,6 +9,7 @@
         </a>
         <div class="collapse show" id="terminal">
           <router-link to="/terminal/tables">Открыть терминал</router-link>
+          <router-link to="/orders">Заказы</router-link>
         </div>
 
         <a href="#menu" class="menu-category" data-toggle="collapse">

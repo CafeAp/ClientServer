@@ -21,8 +21,7 @@ router.get('/get', (req, res) => {
 
 
 router.post('/edit', (req, res) => {
-  let orderPromise,
-     orderItemsPromise
+  let orderPromise
   // Update order
   orderPromise = new Promise(resolve => {
     if (req.body.activeOrder) {
@@ -37,41 +36,8 @@ router.post('/edit', (req, res) => {
       resolve()
     }
   })
-  // Update OrderItems
-  orderItemsPromise = new Promise(resolveCommon => {
-    orderPromise.then(order => {
-      if (req.body.activeOrder && req.body.activeOrder.orderItems) {
-        let promises = [],
-          orderItemIds = []
-        req.body.activeOrder.orderItems.forEach(orderItemData => {
-          promises.push(new Promise(resolve => {
-            orderItemData.id === null || orderItemData.id === undefined
-              ? sequelize.models.OrderItem.create(orderItemData).then(orderItem => {
-                orderItem.setGoods(orderItemData.goods ? orderItemData.goods.id : null)
-                orderItem.setTechCard(orderItemData.techCard ? orderItemData.techCard.id : null)
-                orderItemIds.push(orderItem.getDataValue('id'))
-                resolve()
-              })
-              : sequelize.models.OrderItem.findById(orderItemData.id).then(orderItem => {
-                orderItem.update(orderItemData).then(updatedOrderItem => {
-                  updatedOrderItem.setGoods(orderItemData.goods ? orderItemData.goods.id : null)
-                  updatedOrderItem.setTechCard(orderItemData.techCard ? orderItemData.techCard.id : null)
-                  orderItemIds.push(orderItemData.id)
-                  resolve()
-                })
-              })
-          }))
-        })
-        Promise.all(promises).then(() => {
-          order.setOrderItems(orderItemIds).then(() => resolveCommon(order))
-        })
-      } else {
-        resolveCommon(order)
-      }
-    })
-  })
   // Update table
-  orderItemsPromise.then(order => {
+  orderPromise.then(order => {
     sequelize.models.Table.findById(req.body.id).then(table => {
       table.update(req.body).then(updatedTable => {
         updatedTable.setActiveOrder(order ? order.getDataValue('id') : null).then(() => {

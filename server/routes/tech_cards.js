@@ -28,12 +28,33 @@ router.post('/add', (req, res) => {
 });
 
 router.post('/edit', (req, res) => {
-  sequelize.models.TechCard.findById(req.body.id).then(techCard => {
-    techCard.update(req.body).then(updatedTechCard => {
-      updatedTechCard.setCategory(req.body.category ? req.body.category.id : null)
-      res.send(updatedTechCard.get());
+  let techCardIngredientIds = [],
+    promises = []
+  req.body.techCardIngredients.forEach(techCardIngredientData => {
+    promises.push(new Promise(resolve => {
+      techCardIngredientData.id === null  || techCardIngredientData.id === undefined
+        ? sequelize.models.TechCardIngredient.create(techCardIngredientData).then(techCardIngredient => {
+          techCardIngredient.update({ingredientId: techCardIngredientData.ingredient.id}, {fields: ['ingredientId']})
+          techCardIngredientIds.push(techCardIngredient.getDataValue('id'))
+          resolve()
+        })
+        : sequelize.models.TechCardIngredient.findById(techCardIngredientData.id).then(techCardIngredient => {
+          techCardIngredient.update(techCardIngredientData)
+          techCardIngredient.update({ingredientId: techCardIngredientData.ingredient.id}, {fields: ['ingredientId']})
+          techCardIngredientIds.push(techCardIngredientData.id)
+          resolve()
+        })
+    }))
+  })
+  Promise.all(promises).then(() => {
+    sequelize.models.TechCard.findById(req.body.id, {include: {all: true}}).then(techCard => {
+      techCard.update(req.body).then(updatedTechCard => {
+        updatedTechCard.setCategory(req.body.category ? req.body.category.id : null)
+        updatedTechCard.setTechCardIngredients(techCardIngredientIds)
+        res.send(updatedTechCard.get());
+      }, res.send)
     }, res.send)
-  }, res.send)
+  })
 });
 
 router.delete('/delete', (req, res) => {

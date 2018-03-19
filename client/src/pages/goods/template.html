@@ -1,8 +1,9 @@
 <div class="goods-block">
-  <table class="table-sm table-bordered">
+  <table class="table-sm table-bordered" v-if="warehouse">
     <thead>
       <tr>
         <th>Товар</th>
+        <th>Остаток на складе</th>
         <th>Категория</th>
         <th>Себест.</th>
         <th>Цена</th>
@@ -18,10 +19,18 @@
           </div>
           {{product.name}}
         </td>
+        <td>{{warehouseMap[product.name].amount}}шт</td>
         <td>{{product.category ? product.category.name : null}}</td>
-        <td></td>
+        <td>
+          <span v-if="product.averagePrice !== null">{{product.averagePrice}}руб</span>
+          <span v-else>Нет поставок</span>
+        </td>
         <td>{{product.price}}</td>
-        <td></td>
+        <td>
+          <span v-if="product.averagePrice !== null">
+            {{Math.round((product.price - product.averagePrice) / product.averagePrice * 100)}}%
+          </span>
+          <span v-else>Нет поставок</span>
         <td>
           <i class="table-action fa fa-edit" @click="editGoods(product, i)"></i>
           <i class="table-action fa fa-remove" @click="deleteGoods(product, i)"></i>

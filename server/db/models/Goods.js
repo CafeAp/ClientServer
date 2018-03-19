@@ -12,8 +12,15 @@ module.exports = {
   isWeighted: {
     type: Sequelize.BOOLEAN
   },
+  measure: {
+    type: Sequelize.STRING,
+    defaultValue: 'шт',
+  },
   supplyItemType: {
     type: Sequelize.STRING,
     defaultValue: 'goods',
+  },
+  averagePrice: {
+    type: Sequelize.INTEGER
   }
 }

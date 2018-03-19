@@ -1,0 +1,38 @@
+<div class="orders-block">
+  <table class="table-sm table-bordered">
+    <thead>
+      <tr>
+        <th>Номер заказа</th>
+        <th>Создан</th>
+        <th>Последнее обновление</th>
+        <th>Структура заказа</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(order, i) in orders">
+        <td>{{order.id}}</td>
+        <td>{{formatDate(order.createdAt, true)}}</td>
+        <td>{{formatDate(order.updatedAt, true)}}</td>
+        <td>{{order.orderItems.map(d => `${d.goods ? d.goods.name : d.techCard.name}(${d.amount})`).join(', ')}}</td>
+        <td>
+          <div class="dropdown show" v-if="!tableOrdersMap[order.id]">
+            <button class="btn btn-sm btn-primary dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown">
+              Вернуть на стол
+            </button>
+
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a v-for="table in freeTables" class="dropdown-item" href="#" @click="bindToTable(order, table)">{{table.name}}</a>
+              <span class="no-free-tables-message" v-if="freeTables.length === 0">Нет свободных столов</span>
+            </div>
+          </div>
+          <div v-else>
+            <div class="alert alert-success active-table-message" role="alert">
+              Заказ привязан к столу '{{tableOrdersMap[order.id].name}}'
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
