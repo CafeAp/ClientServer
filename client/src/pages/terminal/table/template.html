@@ -12,14 +12,17 @@
         </thead>
         <tbody>
         <tr v-for="orderItem in _sortBy(table.activeOrder.orderItems, 'createdAt')">
-          <td>{{orderItem[orderItem.techCard ? 'techCard' : 'goods'].name}}</td>
+          <td>
+            {{orderItem.name}}
+            <span v-if="orderItem.isWeighted">(100г)</span>
+          </td>
           <td class="amount-cell">
             <i class="fa fa-minus-square" @click="decreaseOrderItemAmount(orderItem)"></i>
             <div class="amount">{{orderItem.amount}}</div>
             <i class="fa fa-plus-square" @click="increaseOrderItemAmount(orderItem)"></i>
           </td>
-          <td>{{orderItem[orderItem.techCard ? 'techCard' : 'goods'].price}}</td>
-          <td>{{orderItem[orderItem.techCard ? 'techCard' : 'goods'].price * orderItem.amount}}</td>
+          <td>{{orderItem.price}}</td>
+          <td>{{orderItem.price * orderItem.amount}}</td>
         </tr>
         </tbody>
       </table>
@@ -27,7 +30,7 @@
     <div class="footer clearfix">
       <div class="total">
         <div class="name">Итого:</div>
-        <div class="sum">{{_sumBy(table.activeOrder.orderItems, d => d[d.techCard ? 'techCard' : 'goods'].price * d.amount)}}</div>
+        <div class="sum">{{_sumBy(table.activeOrder.orderItems, d => d.price * d.amount)}}</div>
       </div>
       <div class="actions">
         <i class="fa fa-print" @click="callPrint('print-content')"></i>
@@ -101,10 +104,10 @@
         </thead>
         <body>
           <tr v-for="orderItem in _sortBy(table.activeOrder.orderItems, 'createdAt')">
-            <td :style="{padding: '2px 10px 2px 0'}">{{orderItem[orderItem.techCard ? 'techCard' : 'goods'].name}}</td>
+            <td :style="{padding: '2px 10px 2px 0'}">{{orderItem.name}}</td>
             <td :style="{padding: '2px 10px'}">{{orderItem.amount}}</td>
-            <td :style="{padding: '2px 10px'}">{{orderItem[orderItem.techCard ? 'techCard' : 'goods'].price}}</td>
-            <td :style="{padding: '2px 10px'}">{{orderItem[orderItem.techCard ? 'techCard' : 'goods'].price * orderItem.amount}}</td>
+            <td :style="{padding: '2px 10px'}">{{orderItem.price}}</td>
+            <td :style="{padding: '2px 10px'}">{{orderItem.price * orderItem.amount}}</td>
           </tr>
         </body>
       </table>
@@ -112,7 +115,7 @@
     <div class="footer" :style="{'margin-top': '10px'}">
       <div class="total">
         <div :style="{'width': '100px', display: 'inline-block'}">Итого:</div>
-        <span :style="{'font-size': '20px'}"><b>{{_sumBy(table.activeOrder.orderItems, d => d[d.techCard ? 'techCard' : 'goods'].price * d.amount)}}руб</b></span>
+        <span :style="{'font-size': '20px'}"><b>{{_sumBy(table.activeOrder.orderItems, d => d.price * d.amount)}}руб</b></span>
       </div>
     </div>
     <div class="wish" :style="{margin: '40px 0'}">

@@ -1,6 +1,7 @@
 const express = require('express'),
   sequelize = require(`${__basedir}/db/sequelize.js`),
-  router = express.Router()
+  router = express.Router(),
+  upload = require(`${__basedir}/utils/multer.js`)
 
 router.get('/list', (req, res) => {
   sequelize.models.Ingredient.all().then(ingredients => {
@@ -36,6 +37,16 @@ router.post('/add', (req, res) => {
 router.post('/edit', (req, res) => {
   sequelize.models.Ingredient.findById(req.body.id).then(ingredient => {
     ingredient.update(req.body).then(updatedIngredient => {
+      sequelize.models.WarehouseItem.find(
+        {
+          where: {
+            entityId: req.body.id,
+            type: 'ingredient'
+          }
+        }
+      ).then(warehouseItem => {
+        warehouseItem.update({name: req.body.name}, {fields: ['name']})
+      })
       res.send(updatedIngredient);
     }, res.send)
   }, res.send)

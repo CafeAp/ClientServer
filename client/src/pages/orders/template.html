@@ -6,7 +6,7 @@
         <th>Создан</th>
         <th>Последнее обновление</th>
         <th>Структура заказа</th>
-        <th></th>
+        <th>Статус</th>
       </tr>
     </thead>
     <tbody>
@@ -14,7 +14,7 @@
         <td>{{order.id}}</td>
         <td>{{formatDate(order.createdAt, true)}}</td>
         <td>{{formatDate(order.updatedAt, true)}}</td>
-        <td>{{order.orderItems.map(d => `${d.goods ? d.goods.name : d.techCard.name}(${d.amount})`).join(', ')}}</td>
+        <td>{{order.orderItems.map(d => `${d.name}(${d.amount})`).join(', ')}}</td>
         <td>
           <div class="dropdown show" v-if="!tableOrdersMap[order.id]">
             <button class="btn btn-sm btn-primary dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown">

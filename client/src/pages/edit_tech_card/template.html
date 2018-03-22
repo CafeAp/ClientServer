@@ -1,8 +1,8 @@
 <div class="edit-tech-card">
-  <form class="edit-item-form">
+  <form class="edit-item-form" name="techCard">
     <div class="form-group">
       <label for="name">Название</label>
-      <input v-focus v-model="newTechCard.name" type="text" id="name" class="form-control">
+      <input v-focus v-click-focus v-model="newTechCard.name" name="name" type="text" id="name" class="form-control">
     </div>
     <div class="form-group" v-if="categories !== null && categories.length > 0">
       <label for="category">Категория</label>
@@ -13,7 +13,7 @@
     </div>
     <div class="form-group">
       <label for="image">Фотография</label>
-      <input type="file" id="image" class="form-control-file" @change="loadImage($event)">
+      <input type="file" name="image" id="image" class="form-control-file">
     </div>
   </form>
   <div v-if="ingredients" class="sub-items-table-wrapper">
@@ -22,6 +22,7 @@
       <thead>
       <tr>
         <th>Ингредиент</th>
+        <th>Метод приготовления</th>
         <th>Брутто</th>
         <th>Нетто</th>
         <th>Цена</th>
@@ -34,11 +35,35 @@
             <option v-for="ingredient in ingredients" :value="ingredient">{{ingredient.name}}</option>
           </select>
         </td>
-        <td>
-          <input v-model.number="techCardIngredient.grossWeight" type="number" class="form-control" @input="changeNetWeight($event, techCardIngredient)">
+        <td class="cook-method">
+          <div class="form-group">
+            <label for="clean">Очистка</label>
+            <input v-model="techCardIngredient.cookingMethods" value="clean" type="checkbox" id="clean" class="form-control" @change="changeGrossWeight($event, techCardIngredient)">
+          </div>
+          <div class="form-group">
+            <label for="fry">Жарка</label>
+            <input v-model="techCardIngredient.cookingMethods" value="fry" type="checkbox" id="fry" class="form-control" @change="changeGrossWeight($event, techCardIngredient)">
+          </div>
+          <div class="form-group">
+            <label for="boil">Варка</label>
+            <input v-model="techCardIngredient.cookingMethods" value="boil" type="checkbox" id="boil" class="form-control" @change="changeGrossWeight($event, techCardIngredient)">
+          </div>
+          <div class="form-group">
+            <label for="stew">Тушение</label>
+            <input v-model="techCardIngredient.cookingMethods" value="stew" type="checkbox" id="stew" class="form-control" @change="changeGrossWeight($event, techCardIngredient)">
+          </div>
+          <div class="form-group">
+            <label for="bake">Запекание</label>
+            <input v-model="techCardIngredient.cookingMethods" value="bake" type="checkbox" id="bake" class="form-control" @change="changeGrossWeight($event, techCardIngredient)">
+          </div>
         </td>
         <td>
-          <input v-model.number="techCardIngredient.netWeight" type="number" class="form-control">
+          <input v-click-focus v-model.number="techCardIngredient.grossWeight" type="number" class="form-control weight-input" @input="changeNetWeight($event, techCardIngredient)">
+          <span v-if="techCardIngredient.ingredient.measure === 'шт'">шт</span>
+          <span v-else>г</span>
+        </td>
+        <td>
+          <input v-click-focus v-model.number="techCardIngredient.netWeight" type="number" class="form-control weight-input" @input="changeGrossWeight($event, techCardIngredient)">г
         </td>
         <td>
           <div v-if="techCardIngredient.ingredient.id !== null">
@@ -61,7 +86,7 @@
         Себестоимость
       </div>
       <div class="body">
-        <div>{{selfPrice}}руб</div>
+        <div>{{Math.round(selfPrice * 10) / 10}}руб</div>
       </div>
     </div>
     <div class="sign">+</div>
@@ -71,7 +96,7 @@
       </div>
       <div class="body">
         <div class="input">
-          <input v-model.number="extraPrice" type="number" id="extraPrice" class="form-control" @input="calcTotalPrice">
+          <input v-click-focus v-model.number="extraPrice" type="number" id="extraPrice" class="form-control" @input="calcTotalPrice">
         </div>
         <span>%</span>
       </div>
@@ -83,7 +108,7 @@
       </div>
       <div class="body">
         <div class="input">
-          <input v-model.number="newTechCard.price" type="number" id="price" class="form-control" @input="calcExtraPrice">
+          <input v-click-focus v-model.number="newTechCard.price" type="number" id="price" class="form-control" @input="calcExtraPrice">
         </div>
         <span>р</span>
       </div>

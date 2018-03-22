@@ -1,5 +1,9 @@
 global.__basedir = __dirname;
+let dir = __basedir.split('\\')
+dir.pop()
+global.__staticDir = `${dir.join('\\')}\\client\\static\\upload`;
 
+var formData = require("express-form-data");
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -13,14 +17,12 @@ var ingredients = require('./routes/ingredients');
 var goods = require('./routes/goods');
 var techCards = require('./routes/tech_cards');
 var supplies = require('./routes/supplies');
-var warehouse = require('./routes/warehouse');
 var rooms = require('./routes/rooms');
 var tables = require('./routes/tables');
 var orders = require('./routes/orders');
 var warehouse = require('./routes/warehouse');
 
 var app = express();
-require('run-middleware')(app)
 var cors = require('cors')
 var sequelize = require('./db/sequelize.js')
 // view engine setup

@@ -1,0 +1,63 @@
+<div class="report">
+  <div class="card today" v-if="todayOrders">
+    <div class="card-header">Сегодня, {{formatDate(Date.now())}}</div>
+    <div class="card-footer">
+
+      <div class="today-item">
+        <div class="today-item-header">
+          Выручка
+        </div>
+        <div class="today-item-body">
+          {{todayProceeds}}руб
+        </div>
+      </div>
+
+      <div class="today-item">
+        <div class="today-item-header">
+          Прибыль
+        </div>
+        <div class="today-item-body">
+          {{todayProfit}}руб
+        </div>
+      </div>
+
+      <div class="today-item">
+        <div class="today-item-header">
+          Чеков
+        </div>
+        <div class="today-item-body">
+          {{todayChecks}}
+        </div>
+      </div>
+
+      <div class="today-item">
+        <div class="today-item-header">
+          Средний чек
+        </div>
+        <div class="today-item-body">
+          {{averageCheck}}руб
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="actions">
+    <div class="date-selector">
+      <date-picker v-model="dateRange" not-after range lang="ru"></date-picker>
+      <div class="line-chart" v-if="monthOrders">
+        <chartjs-line :beginzero="true"
+                      :height="300"
+                      :width="lineChartWidth"
+                      :datalabel="dataLabelForLineChart"
+                      :labels="formattedMonthLabels"
+                      :pointborderwidth="4"
+                      :pointbordercolor="'#f35009'"
+                      :pointhoverborderwidth="3"
+                      :pointhoverbackgroundcolor="'#636b6f'"
+                      :pointhoverbordercolor="'#ffd663'"
+                      :data="dataForLineChart">
+        </chartjs-line>
+      </div>
+    </div>
+  </div>
+</div>

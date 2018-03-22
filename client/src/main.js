@@ -5,7 +5,9 @@ import App from './App';
 import router from './router';
 import VueResource from 'vue-resource';
 import store from '@/store'
-
+import 'chart.js'
+import 'hchs-vue-charts'
+Vue.use(VueCharts);
 require('@/assets/directives')
 
 Vue.use(VueResource);

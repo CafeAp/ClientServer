@@ -1,6 +1,7 @@
 const express = require('express'),
   sequelize = require(`${__basedir}/db/sequelize.js`),
-  router = express.Router()
+  router = express.Router(),
+  upload = require(`${__basedir}/utils/multer.js`)
 
 router.get('/list', (req, res) => {
   sequelize.models.Goods.all({include: [{all: true, nested: true}]}).then(goods => {
@@ -15,7 +16,9 @@ router.get('/get', (req, res) => {
 })
 
 
-router.post('/add', (req, res) => {
+router.post('/add', upload.any(), (req, res) => {
+  if (req.files[0]) req.body.image = `/static/upload/${req.files[0].originalname}`
+  if (req.body.category) req.body.category = JSON.parse(req.body.category)
   sequelize.models.Goods.create(req.body).then(goods => {
     if (req.body.category) goods.setCategory(req.body.category.id)
     sequelize.models.WarehouseItem.create(
@@ -34,9 +37,21 @@ router.post('/add', (req, res) => {
   }, res.send);
 });
 
-router.post('/edit', (req, res) => {
+router.post('/edit', upload.any(), (req, res) => {
+  if (req.files[0]) req.body.image = `/static/upload/${req.files[0].originalname}`
+  if (req.body.category) req.body.category = JSON.parse(req.body.category)
   sequelize.models.Goods.findById(req.body.id).then(goods => {
     goods.update(req.body).then(updatedGoods => {
+      sequelize.models.WarehouseItem.find(
+        {
+          where: {
+            entityId: req.body.id,
+            type: 'goods'
+          }
+        }
+      ).then(warehouseItem => {
+        warehouseItem.update({name: req.body.name}, {fields: ['name']})
+      })
       updatedGoods.setCategory(req.body.category ? req.body.category.id : null)
       res.send(updatedGoods);
     }, res.send)

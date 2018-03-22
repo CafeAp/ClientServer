@@ -2,50 +2,50 @@
   <form class="edit-item-form">
     <div class="form-group">
       <label for="name">Название</label>
-      <input v-focus v-model="newIngredient.name" type="text" id="name" class="form-control">
+      <input v-focus v-click-focus v-model="newIngredient.name" type="text" id="name" class="form-control">
     </div>
-    <div class="form-group short">
-      <label for="measure">Ед. измерения</label>
-      <select v-model="newIngredient.measure" id="measure" class="form-control">
-        <option value="кг">кг</option>
-        <option value="л">л</option>
-      </select>
-    </div>
+    <!--<div class="form-group short">-->
+      <!--<label for="measure">Ед. измерения</label>-->
+      <!--<select v-model="newIngredient.measure" id="measure" class="form-control">-->
+        <!--<option value="кг">кг</option>-->
+        <!--<option value="шт">шт</option>-->
+      <!--</select>-->
+    <!--</div>-->
     <div class="form-group short">
       <label for="lost_clean">% потерь при</label>
       <div class="input-group mb-2">
         <div class="input-group-prepend">
           <span class="input-group-text">Очистке</span>
         </div>
-        <input v-model="newIngredient.lostClean" type="number" min="0" max="100" id="lost_clean" class="form-control">
+        <input v-click-focus v-model="newIngredient.lostClean" type="number" min="0" max="100" id="lost_clean" class="form-control">
       </div>
 
       <div class="input-group mb-2">
         <div class="input-group-prepend">
           <span class="input-group-text">Варке</span>
         </div>
-        <input v-model="newIngredient.lostBoil" type="number" min="0" max="100" id="lost_boil" class="form-control">
+        <input v-click-focus v-model="newIngredient.lostBoil" type="number" min="0" max="100" id="lost_boil" class="form-control">
       </div>
 
       <div class="input-group mb-2">
         <div class="input-group-prepend">
           <span class="input-group-text">Жарке</span>
         </div>
-        <input v-model="newIngredient.lostFry" type="number" min="0" max="100" id="lost_fry" class="form-control">
+        <input v-click-focus v-model="newIngredient.lostFry" type="number" min="0" max="100" id="lost_fry" class="form-control">
       </div>
 
       <div class="input-group mb-2">
         <div class="input-group-prepend">
           <span class="input-group-text">Тушении</span>
         </div>
-        <input v-model="newIngredient.lostStew" type="number" min="0" max="100" id="lost_skew" class="form-control">
+        <input v-click-focus v-model="newIngredient.lostStew" type="number" min="0" max="100" id="lost_skew" class="form-control">
       </div>
 
       <div class="input-group mb-2">
         <div class="input-group-prepend">
           <span class="input-group-text">Запекании</span>
         </div>
-        <input v-model="newIngredient.lostBake" type="number" min="0" max="100" id="lost_bake" class="form-control">
+        <input v-click-focus v-model="newIngredient.lostBake" type="number" min="0" max="100" id="lost_bake" class="form-control">
       </div>
     </div>
   </form>

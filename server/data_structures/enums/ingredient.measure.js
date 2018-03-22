@@ -1,1 +1,1 @@
-module.exports = ['кг', 'л']
+module.exports = ['кг', 'л', 'шт']

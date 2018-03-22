@@ -30,8 +30,9 @@ sequelize.models.Room.hasMany(sequelize.models.Table, {as: 'tables'})
 
 sequelize.models.Table.hasOne(sequelize.models.Order, {as: 'activeOrder'})
 sequelize.models.Order.OrderItem = sequelize.models.Order.hasMany(sequelize.models.OrderItem, {as: 'orderItems'})
-sequelize.models.OrderItem.belongsTo(sequelize.models.TechCard, {as: 'techCard'})
-sequelize.models.OrderItem.belongsTo(sequelize.models.Goods, {as: 'goods'})
+sequelize.models.OrderItem.ItemForWriteOff = sequelize.models.OrderItem.hasMany(sequelize.models.ItemForWriteOff, {as: 'itemsForWriteOff'})
+// sequelize.models.OrderItem.belongsTo(sequelize.models.TechCard, {as: 'techCard'})
+// sequelize.models.OrderItem.belongsTo(sequelize.models.Goods, {as: 'goods'})
 
 sequelize.models.Warehouse.hasMany(sequelize.models.WarehouseItem, {as: 'warehouseItems'})
 

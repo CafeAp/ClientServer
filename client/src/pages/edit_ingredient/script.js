@@ -6,7 +6,7 @@ export default {
     return {
       newIngredient: {
         name: null,
-        measure: 'kg',
+        measure: 'кг',
         lostClean: 0,
         lostBoil: 0,
         lostFry: 0,

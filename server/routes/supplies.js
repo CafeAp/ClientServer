@@ -31,7 +31,7 @@ function updateAveragePrice(warehouseItem) {
       i++
     }
     sequelize.models[warehouseItem.type === 'ingredient' ? 'Ingredient' : 'Goods'].findById(warehouseItem.entityId).then(entity => {
-      entity.update({averagePrice: _sum(prices) / _sum(amounts)}, {fields: ['averagePrice']})
+      entity.update({averagePrice: Math.round((_sum(prices) / _sum(amounts)) * 100) / 100}, {fields: ['averagePrice']})
     })
   })
 }
@@ -75,19 +75,23 @@ addSupply = (req, res) => {
 
 deleteSupply = (req, res) => {
   sequelize.models.Supply.findById(req.query.id, {include: {all: true, nested: true}}).then(supply => {
-    supply.supplyItems.forEach(supplyItem => {
-      let type = supplyItem.ingredient ? 'ingredient' : 'goods'
-      getWarehouseItem(type, supplyItem[type].name).then(warehouseItem => {
-        warehouseItem.update({amount: warehouseItem.getDataValue('amount') - supplyItem.amount}, {fields: ['amount']}).then(updatedWarehouseItem => {
-          supply.supplyItems.forEach(supplyItem => {
-            supplyItem.destroy()
-          })
-          supply.destroy(req.body).then(() => {
-            updateAveragePrice(updatedWarehouseItem)
-            res.sendStatus(200);
+    supply.supplyItems.length === 0
+      ?  supply.destroy(req.body).then(() => {
+          res.sendStatus(200);
+        })
+      : supply.supplyItems.forEach(supplyItem => {
+        let type = supplyItem.ingredient ? 'ingredient' : 'goods'
+        getWarehouseItem(type, supplyItem[type].name).then(warehouseItem => {
+          warehouseItem.update({amount: warehouseItem.getDataValue('amount') - supplyItem.amount}, {fields: ['amount']}).then(updatedWarehouseItem => {
+            supply.supplyItems.forEach(supplyItem => {
+              supplyItem.destroy()
+            })
+            supply.destroy(req.body).then(() => {
+              updateAveragePrice(updatedWarehouseItem)
+              res.sendStatus(200);
+            })
           })
         })
-      })
     })
   })
 }

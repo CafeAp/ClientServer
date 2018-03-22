@@ -1,0 +1,25 @@
+@import '../../../assets/styles/variables.scss';
+
+.report {
+  .today {
+    .card-footer {
+      display: flex;
+      justify-content: space-around;
+      .today-item {
+        text-align: center;
+        .today-item-header {
+          font-size: 14px;
+        }
+        .today-item-body {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+  .actions {
+    margin-top: 10px;
+  }
+  .line-chart {
+    height: 200px;
+  }
+}

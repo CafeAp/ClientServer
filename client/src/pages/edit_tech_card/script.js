@@ -3,6 +3,8 @@ import newTechCardIngredientTPL from '@/assets/model_templates/new_tech_card_ing
 import _cloneDeep from 'lodash/cloneDeep'
 import _sumBy from 'lodash/sumBy'
 import _sum from 'lodash/sum'
+import _capitalize from 'lodash/capitalize'
+import _max from 'lodash/max'
 import utils from '@/assets/utils'
 
 export default {
@@ -52,14 +54,19 @@ export default {
     if (!this.isNew) {
       this.$http.get('api/tech_cards/get', {params: {id: this.$route.params.id}}).then(resp => {
         this.$set(this, 'newTechCard', resp.body)
-        this.extraPrice = (resp.body.price / _sumBy(resp.body.techCardIngredients, d => d.ingredient.averagePrice * d.grossWeight) - 1) * 100
+        this.calcExtraPrice()
       })
     }
   },
   methods: {
     _sum,
     saveTechCard() {
-      this.$http.post(`api/tech_cards/${this.isNew ? 'add' : 'edit'}`, this.newTechCard).then(resp => {
+      let formData = new FormData(document.forms.techCard)
+      if (this.newTechCard.id !== undefined) formData.append('id', this.newTechCard.id)
+      if (this.newTechCard.category) formData.append('category', JSON.stringify(this.newTechCard.category))
+      formData.append('price', this.newTechCard.price)
+      formData.append('techCardIngredients', JSON.stringify(this.newTechCard.techCardIngredients))
+      this.$http.post(`api/tech_cards/${this.isNew ? 'add' : 'edit'}`, formData).then(resp => {
         this.$store.dispatch('setAlertMessageForTime', 'success')
         setTimeout(() => {
           this.$router.push('/tech_cards')
@@ -72,29 +79,35 @@ export default {
       let newTechCardIngredient = _cloneDeep(newTechCardIngredientTPL)
       this.newTechCard.techCardIngredients.push(newTechCardIngredient)
     },
-    loadImage: function (e) {
-      utils.loadImage(e, e => {
-        this.newTechCard.image = e.target.result
-      })
-    },
     changeNetWeight: function (e, techCardIngredient) {
-      techCardIngredient.netWeight = techCardIngredient.grossWeight
+      techCardIngredient.netWeight = techCardIngredient.grossWeight - techCardIngredient.grossWeight * this.getNumberOfLosses(techCardIngredient) * 0.01
+    },
+    changeGrossWeight: function (e, techCardIngredient) {
+      techCardIngredient.grossWeight = techCardIngredient.netWeight + techCardIngredient.netWeight * this.getNumberOfLosses(techCardIngredient) * 0.01
+    },
+    getNumberOfLosses: function (techCardIngredient) {
+      let lossesNumber = 0,
+        maxLoss
+      if (techCardIngredient.cookingMethods.includes('clean')) lossesNumber += techCardIngredient.ingredient.lostClean
+      maxLoss = _max(techCardIngredient.cookingMethods.filter(c => c !== 'clean').map(c => techCardIngredient.ingredient[`lost${_capitalize(c)}`]))
+      lossesNumber += maxLoss || 0
+      return lossesNumber
     },
     getIngredientPrice: function (techCardIngredient) {
       if (techCardIngredient.ingredient.id === null) return 0
-      return Math.ceil(techCardIngredient.ingredient.averagePrice * techCardIngredient.grossWeight)
+      return Math.ceil(techCardIngredient.ingredient.averagePrice * techCardIngredient.grossWeight) / 1000
     },
     calcTotalPrice: function () {
-      this.newTechCard.price = this.selfPrice + Math.ceil(this.selfPrice * (this.extraPrice * 0.01))
+      this.newTechCard.price = this.selfPrice + Math.round(this.selfPrice * (this.extraPrice * 0.01) * 100) / 100
     },
     calcExtraPrice: function () {
-      this.extraPrice = Math.round((this.newTechCard.price / this.selfPrice - 1) * 100)
+      this.extraPrice = Math.round((this.newTechCard.price / this.selfPrice - 1) * 100 * 100) / 100
     }
   },
   watch: {
     'newTechCard.techCardIngredients': {
       handler: function () {
-        this.calcTotalPrice()
+        this.calcExtraPrice()
       },
       deep: true
     }

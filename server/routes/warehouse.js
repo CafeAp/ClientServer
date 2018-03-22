@@ -33,7 +33,7 @@ router.get('/get', (req, res) => {
             amounts.push(amount)
             prices.push(supplyItems[i].getDataValue('totalPrice'))
           }
-          warehouseData.warehouseItems[i].averagePrice = _sum(prices.map((p, i) => p * amounts[i])) / _sum(amounts)
+          warehouseData.warehouseItems[i].averagePrice = Math.round((_sum(prices.map((p, i) => p * amounts[i])) / _sum(amounts)) * 100) / 100
           resolve()
         })
       }))

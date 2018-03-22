@@ -1,6 +1,7 @@
 const express = require('express'),
   sequelize = require(`${__basedir}/db/sequelize.js`),
-  router = express.Router()
+  router = express.Router(),
+  upload = require(`${__basedir}/utils/multer.js`)
 
 router.get('/list', (req, res) => {
   sequelize.models.TechCard.all({include: [{all: true, nested: true}]}).then(techCards => {
@@ -15,7 +16,10 @@ router.get('/get', (req, res) => {
 })
 
 
-router.post('/add', (req, res) => {
+router.post('/add', upload.any(), (req, res) => {
+  if (req.files[0]) req.body.image = `/static/upload/${req.files[0].originalname}`
+  req.body.techCardIngredients = JSON.parse(req.body.techCardIngredients)
+  if (req.body.category) req.body.category = JSON.parse(req.body.category)
   sequelize.models.TechCard.create(req.body, {
     include: [sequelize.models.TechCard.TechCardIngredients],
   }).then(techCard => {
@@ -27,9 +31,12 @@ router.post('/add', (req, res) => {
   }, res.send);
 });
 
-router.post('/edit', (req, res) => {
+router.post('/edit', upload.any(), (req, res) => {
+  if (req.files[0]) req.body.image = `/static/upload/${req.files[0].originalname}`
   let techCardIngredientIds = [],
     promises = []
+  req.body.techCardIngredients = JSON.parse(req.body.techCardIngredients)
+  if (req.body.category) req.body.category = JSON.parse(req.body.category)
   req.body.techCardIngredients.forEach(techCardIngredientData => {
     promises.push(new Promise(resolve => {
       techCardIngredientData.id === null  || techCardIngredientData.id === undefined

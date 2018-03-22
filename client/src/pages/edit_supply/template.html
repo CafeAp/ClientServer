@@ -13,10 +13,9 @@
       <thead>
       <tr>
         <th>Название</th>
-        <th>Фасовка</th>
         <th>Количество</th>
-        <th>Цена за ед</th>
-        <th>Прежняя цена</th>
+        <th>Цена за кг</th>
+        <!--<th>Прежняя цена</th>-->
         <th>Сумма</th>
       </tr>
       </thead>
@@ -30,22 +29,14 @@
           </select>
         </td>
         <td>
-          Упаковка
-          <!--<select v-model="supplyGood.packaging">-->
-          <!--<option v-for="['lt', 'kg']" value=""></option>-->
-          <!--</select>-->
+          <input v-click-focus v-model.number="supplyItem.amount" type="number" class="form-control weight-input" @input="recalcTotalPrice(supplyItem)">кг
         </td>
         <td>
-          <input v-model.number="supplyItem.amount" type="number" class="form-control" @input="recalcTotalPrice(supplyItem)">
+          <input v-click-focus v-model.number="supplyItem.priceForOne" type="number" class="form-control" @input="recalcTotalPrice(supplyItem)">
         </td>
+        <!--<td></td>-->
         <td>
-          <input v-model.number="supplyItem.priceForOne" type="number" class="form-control" @input="recalcTotalPrice(supplyItem)">
-        </td>
-        <td>
-          Прежняя цена
-        </td>
-        <td>
-          <input v-model.number="supplyItem.totalPrice" type="number" class="form-control" @input="recalcPriceForOne(supplyItem)">
+          <input v-click-focus v-model.number="supplyItem.totalPrice" type="number" class="form-control" @input="recalcPriceForOne(supplyItem)">
         </td>
       </tr>
       </tbody>

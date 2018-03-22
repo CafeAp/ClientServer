@@ -63,18 +63,15 @@ export default {
       result.splice(parentIndex, 1)
     },
     saveCategory() {
-      this.$http.post(`api/categories/${this.isNew ? 'add' : 'edit'}`, this.newCategory).then(resp => {
+      let formData = new FormData(document.forms.category)
+      if (this.newCategory.id !== undefined) formData.append('id', this.newCategory.id)
+      this.$http.post(`api/categories/${this.isNew ? 'add' : 'edit'}`, formData).then(resp => {
         this.$store.dispatch('setAlertMessageForTime', 'success')
         setTimeout(() => {
           this.$router.push('/categories')
         }, 500)
       }, () => {
         this.$store.dispatch('setAlertMessageForTime', 'error')
-      })
-    },
-    loadImage: function (e) {
-      utils.loadImage(e, e => {
-        this.newCategory.image = e.target.result
       })
     }
   }

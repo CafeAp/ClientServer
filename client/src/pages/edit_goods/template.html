@@ -1,8 +1,8 @@
 <div class="new-goods">
-  <form class="edit-item-form">
+  <form class="edit-item-form" name="goods">
     <div class="form-group">
       <label for="name">Название</label>
-      <input v-focus v-model="newGoods.name" type="text" id="name" class="form-control">
+      <input v-focus v-click-focus v-model="newGoods.name" name="name" type="text" id="name" class="form-control">
     </div>
     <div class="form-group" v-if="categories !== null && categories.length > 0">
       <label for="category">Категория</label>
@@ -13,15 +13,15 @@
     </div>
     <div class="form-group">
       <label for="price">Цена</label>
-      <input v-model="newGoods.price" type="text" id="price" class="form-control">
+      <input v-click-focus v-model="newGoods.price" name="price" type="text" id="price" class="form-control">
     </div>
     <div class="form-group">
       <label for="photo">Фотография</label>
-      <input type="file" id="photo" class="form-control-file" @change="loadImage($event)">
+      <input type="file" name="image" id="photo" class="form-control-file">
     </div>
     <div class="form-check">
-      <input v-model="newGoods.isWeighted" type="checkbox" id="isWeighted" class="form-check-input">
-      <label for="isWeighted" class="i-b form-check-label">Весовой товар</label>
+      <input v-model="newGoods.isWeighted" name="isWeighted" type="checkbox" id="isWeighted" class="form-check-input">
+      <label for="isWeighted" class="i-b form-check-label">Весовой товар(цена за 100г)</label>
     </div>
   </form>
   <div class="buttons">

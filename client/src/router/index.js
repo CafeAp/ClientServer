@@ -43,6 +43,9 @@ import terminalTableHeader from '@/pages/terminal/table/header/bundle.vue'
 import orders from '@/pages/orders/bundle.vue'
 import ordersHeader from '@/pages/orders/header/bundle.vue'
 
+import reportsMain from '@/pages/reports/main/bundle.vue'
+import reportsMainHeader from '@/pages/reports/main/header/bundle.vue'
+
 Vue.use(Router);
 export default new Router({
   mode: 'history',
@@ -143,6 +146,13 @@ export default new Router({
       components: {
         header: ordersHeader,
         body: orders
+      }
+    },
+    {
+      path: '/reports/main',
+      components: {
+        header: reportsMainHeader,
+        body: reportsMain
       }
     },
     {

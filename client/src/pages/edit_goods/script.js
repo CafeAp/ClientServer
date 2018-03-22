@@ -38,19 +38,16 @@ export default {
   },
   methods: {
     saveGoods() {
-      console.error(this.newGoods)
-      this.$http.post(`api/goods/${this.isNew ? 'add' : 'edit'}`, this.newGoods).then(resp => {
+      let formData = new FormData(document.forms.goods)
+      if (this.newGoods.category) formData.append('category', JSON.stringify(this.newGoods.category))
+      if (this.newGoods.id !== undefined) formData.append('id', this.newGoods.id)
+      this.$http.post(`api/goods/${this.isNew ? 'add' : 'edit'}`, formData).then(resp => {
         this.$store.dispatch('setAlertMessageForTime', 'success')
         setTimeout(() => {
           this.$router.push('/goods')
         }, 500)
       }, () => {
         this.$store.dispatch('setAlertMessageForTime', 'error')
-      })
-    },
-    loadImage: function (e) {
-      utils.loadImage(e, e => {
-        this.newGoods.image = e.target.result
       })
     }
   }

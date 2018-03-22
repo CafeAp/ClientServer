@@ -1,8 +1,33 @@
 @import '../../assets/styles/variables.scss';
 
+.edit-tech-card {
+  .weight-input {
+    display: inline-block;
+    margin-right: 5px;
+    width: calc(100% - 30px);
+  }
+  td.cook-method {
+    vertical-align: middle;
+    .form-group {
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 0;
+      margin-top: 10px;
+      label {
+      }
+      input {
+        display: inline-block;
+        width: 20px;
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
 .price-block {
   width: 600px;
   margin-top: 10px;
+  margin-bottom: 20px;
   .sign {
     display: inline-block;
     vertical-align: bottom;

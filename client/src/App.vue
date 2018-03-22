@@ -12,6 +12,14 @@
           <router-link to="/orders">Заказы</router-link>
         </div>
 
+        <a href="#reports" class="menu-category" data-toggle="collapse">
+          <i class="fa fa-line-chart"></i>
+          <span>Отчеты</span>
+        </a>
+        <div class="collapse show" id="reports">
+          <router-link to="/reports/main">Общие</router-link>
+        </div>
+
         <a href="#menu" class="menu-category" data-toggle="collapse">
           <i class="fa fa-file"></i>
           <span>Меню</span>
@@ -196,6 +204,8 @@
   }
   .sub-items-table-wrapper {
     padding: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
     background: #eee;
     table {
       margin: 10px 0;

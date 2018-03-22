@@ -4,6 +4,7 @@ import _last from 'lodash/last'
 import _debounce from 'lodash/debounce'
 import _sortBy from 'lodash/sortBy'
 import _sumBy from 'lodash/sumBy'
+import _sum from 'lodash/sum'
 import category from '@/pages/terminal/table/category/bundle'
 
 export default {
@@ -76,28 +77,48 @@ export default {
     unblockMenu() {
       this.isMenuBlocked = false
     },
+    getNewOrderItem(item) {
+      return {
+        name: item.name,
+        amount: 1,
+        itemId: item.id,
+        itemType: item.type,
+        selfPrice: item.type === 'goods' ? item.averagePrice : _sum(item.techCardIngredients.map(d => d.ingredient.averagePrice * d.grossWeight * 0.001)),
+        price: item.price,
+        isWeighted: item.isWeighted,
+        itemsForWriteOff: item.type === 'goods'
+                            ? [{ name: item.name, entityId: item.id, type: 'goods', amount: item.isWeighted ? 0.1 : 1 }]
+                            : item.techCardIngredients.map(d => {
+                                return { name: d.ingredient.name, entityId: d.ingredient.id, type: 'ingredient', amount: d.grossWeight / 1000 }
+                              })
+      }
+    },
+    getSameOrderItem(type, id) {
+      return this.table.activeOrder.orderItems.find(d => d.itemType === type && d.itemId === id)
+    },
     addGoodsToOrder(goods) {
       if (this.isMenuBlocked) return false
-      let sameOrderItem = this.table.activeOrder.orderItems.find(d => d.goods && d.goods.id === goods.id)
+      let sameOrderItem = this.getSameOrderItem('goods', goods.id)
       if (sameOrderItem) {
         this.increaseOrderItemAmount(sameOrderItem)
         return false
       }
-      this.blockMenu()
-      this.$http.post('api/orders/orderItem/add', {order: this.table.activeOrder, orderItem: {goods, amount: 1}}).then(resp => {
-        this.unblockMenu()
-        this.table.activeOrder = resp.body
-      })
+      let newOrderItem = this.getNewOrderItem(goods)
+      this.addNewOrderItem(newOrderItem)
     },
     addTechCardToOrder(techCard) {
       if (this.isMenuBlocked) return false
-      let sameOrderItem = this.table.activeOrder.orderItems.find(d => d.techCard && d.techCard.id === techCard.id)
+      let sameOrderItem = this.getSameOrderItem('techCard', techCard.id)
       if (sameOrderItem) {
         this.increaseOrderItemAmount(sameOrderItem)
         return false
       }
+      let newOrderItem = this.getNewOrderItem(techCard)
+      this.addNewOrderItem(newOrderItem)
+    },
+    addNewOrderItem(orderItem) {
       this.blockMenu()
-      this.$http.post('api/orders/orderItem/add', {order: this.table.activeOrder, orderItem: {techCard, amount: 1}}).then(resp => {
+      this.$http.post('api/orders/orderItem/add', {order: this.table.activeOrder, orderItem}).then(resp => {
         this.unblockMenu()
         this.table.activeOrder = resp.body
       })

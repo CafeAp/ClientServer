@@ -1,16 +1,15 @@
 let Sequelize = require('sequelize')
 module.exports = {
+  entityId: {
+    type: Sequelize.STRING
+  },
   name: {
     type: Sequelize.STRING
   },
-  image: {
-    type: Sequelize.TEXT
-  },
-  price: {
+  amount: {
     type: Sequelize.INTEGER
   },
   type: {
-    type: Sequelize.STRING,
-    defaultValue: 'techCard',
+    type: Sequelize.STRING
   }
 }

@@ -27,6 +27,12 @@ export default {
     toggleComposition(techCardId) {
       let index = this.cardsIdsWithShownComposition.indexOf(techCardId)
       index === -1 ? this.cardsIdsWithShownComposition.push(techCardId) : this.cardsIdsWithShownComposition.splice(index, 1)
+    },
+    getSelfPrice(techCard) {
+      return Math.round(_sumBy(techCard.techCardIngredients, d => d.ingredient.averagePrice * d.grossWeight) / 1000)
+    },
+    getExtraPrice: function (techCard) {
+      return Math.round((techCard.price / this.getSelfPrice(techCard) - 1) * 100 * 100) / 100
     }
   }
 }

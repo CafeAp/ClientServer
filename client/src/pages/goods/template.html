@@ -25,12 +25,13 @@
           <span v-if="product.averagePrice !== null">{{product.averagePrice}}руб</span>
           <span v-else>Нет поставок</span>
         </td>
-        <td>{{product.price}}</td>
+        <td>{{product.price}}руб</td>
         <td>
           <span v-if="product.averagePrice !== null">
             {{Math.round((product.price - product.averagePrice) / product.averagePrice * 100)}}%
           </span>
           <span v-else>Нет поставок</span>
+        </td>
         <td>
           <i class="table-action fa fa-edit" @click="editGoods(product, i)"></i>
           <i class="table-action fa fa-remove" @click="deleteGoods(product, i)"></i>

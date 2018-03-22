@@ -20,6 +20,10 @@ module.exports = {
     type: Sequelize.STRING,
     defaultValue: 'goods',
   },
+  type: {
+    type: Sequelize.STRING,
+    defaultValue: 'goods',
+  },
   averagePrice: {
     type: Sequelize.INTEGER
   }

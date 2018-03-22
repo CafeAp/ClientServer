@@ -1,6 +1,7 @@
 const express = require('express'),
   sequelize = require(`${__basedir}/db/sequelize.js`),
-  router = express.Router()
+  router = express.Router(),
+  upload = require(`${__basedir}/utils/multer.js`)
 
 let setSubCategories = async function (categoriesData, categoriesWithSubs) {
   let promises = []
@@ -60,14 +61,16 @@ router.get('/get', (req, res) => {
 })
 
 
-router.post('/add', (req, res) => {
+router.post('/add', upload.any(), (req, res) => {
+  if (req.files[0]) req.body.image = `/static/upload/${req.files[0].originalname}`
   sequelize.models.Category.create(req.body).then(createdCategory => {
     if (req.body.parentCategory) createdCategory.setParentCategory(req.body.parentCategory.id)
     res.send(createdCategory);
   }, res.send);
 });
 
-router.post('/edit', (req, res) => {
+router.post('/edit', upload.any(), (req, res) => {
+  if (req.files[0]) req.body.image = `/static/upload/${req.files[0].originalname}`
   sequelize.models.Category.findById(req.body.id).then(category => {
     category.update(req.body).then(updatedCategory => {
       updatedCategory.setParentCategory(req.body.parentCategory ? req.body.parentCategory.id : null)
