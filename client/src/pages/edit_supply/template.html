@@ -17,10 +17,11 @@
         <th>Цена за кг</th>
         <!--<th>Прежняя цена</th>-->
         <th>Сумма</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="supplyItem in newSupply.supplyItems">
+      <tr v-for="(supplyItem, i) in newSupply.supplyItems">
         <td>
           <select v-model="supplyItem.concreteSupplyItem" class="form-control">
             <option v-for="concreteSupplyItem in concreteSupplyItems"
@@ -37,6 +38,9 @@
         <!--<td></td>-->
         <td>
           <input v-click-focus v-model.number="supplyItem.totalPrice" type="number" class="form-control" @input="recalcPriceForOne(supplyItem)">
+        </td>
+        <td>
+          <i class="table-action fa fa-remove" @click="deleteSupplyItem(i)"></i>
         </td>
       </tr>
       </tbody>

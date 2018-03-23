@@ -1,10 +1,12 @@
 let Sequelize = require('sequelize')
 module.exports = {
   grossWeight: {
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER,
+    defaultValue: 0
   },
   netWeight: {
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER,
+    defaultValue: 0
   },
   price: {
     type: Sequelize.INTEGER

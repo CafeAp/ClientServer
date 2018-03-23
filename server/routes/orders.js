@@ -5,7 +5,10 @@ const express = require('express'),
 
 router.get('/list', (req, res) => {
   let where = {}
-  if (req.query.dateRange) where.createdAt = { [sequelize.Op.between]: req.query.dateRange }
+  if (req.query.dateRange) where.createdAt = {
+    [sequelize.Op.gte]: req.query.dateRange[0],
+    [sequelize.Op.lte]: req.query.dateRange[1]
+  }
   sequelize.models.Order.all(
     {
       include: {all: true, nested: true},

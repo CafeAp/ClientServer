@@ -4,6 +4,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _concat from 'lodash/concat'
 import _sumBy from 'lodash/sumBy'
 import _isEqual from 'lodash/isEqual'
+import _every from 'lodash/every'
 import newSupplyItemTPL from '@/assets/model_templates/new_supply_item.tpl.js'
 
 export default {
@@ -23,7 +24,7 @@ export default {
       alertMessage: 'alertMessage'
     }),
     validForm() {
-      return true
+      return this.newSupply.supplyItems.length !== 0 && _every(this.newSupply.supplyItems, d => !!d.concreteSupplyItem.type)
     },
     isNew() {
       return this.$route.params.id === undefined
@@ -90,6 +91,9 @@ export default {
     },
     recalcPriceForOne(supplyItem) {
       supplyItem.priceForOne = supplyItem.totalPrice / supplyItem.amount
+    },
+    deleteSupplyItem: function (i) {
+      this.newSupply.supplyItems.splice(i, 1)
     }
   }
 }

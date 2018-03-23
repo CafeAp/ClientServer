@@ -27,9 +27,10 @@ router.post('/edit', (req, res) => {
   Promise.all(promises).then(() => {
     sequelize.models.Room.findById(req.body.id).then(room => {
       room.update(req.body).then(updatedRoom => {
-        updatedRoom.setTables(tableIds)
+        updatedRoom.setTables(tableIds).then(() => {
+          sequelize.models.Room.findById(req.body.id, {include: {all: true, nested: true}}).then(room => res.send(room))
+        })
       })
-      res.send(room);
     }, res.send)
   })
 })

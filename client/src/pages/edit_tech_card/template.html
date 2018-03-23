@@ -26,13 +26,16 @@
         <th>Брутто</th>
         <th>Нетто</th>
         <th>Цена</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="techCardIngredient in newTechCard.techCardIngredients">
+      <tr v-for="(techCardIngredient, i) in newTechCard.techCardIngredients">
         <td>
           <select v-model="techCardIngredient.ingredient" class="form-control">
-            <option v-for="ingredient in ingredients" :value="ingredient">{{ingredient.name}}</option>
+            <option v-for="ingredient in ingredients"
+                    v-show="newTechCard.techCardIngredients.findIndex(d => d.ingredient.id === ingredient.id) === -1"
+                    :value="ingredient">{{ingredient.name}}</option>
           </select>
         </td>
         <td class="cook-method">
@@ -58,17 +61,30 @@
           </div>
         </td>
         <td>
-          <input v-click-focus v-model.number="techCardIngredient.grossWeight" type="number" class="form-control weight-input" @input="changeNetWeight($event, techCardIngredient)">
+          <input v-click-focus
+                 v-model.number="techCardIngredient.grossWeight"
+                 type="number"
+                 class="form-control weight-input"
+                 @blur="setZeroIfEmpty($event, techCardIngredient, 'grossWeight')"
+                 @input="changeNetWeight($event, techCardIngredient)">
           <span v-if="techCardIngredient.ingredient.measure === 'шт'">шт</span>
           <span v-else>г</span>
         </td>
         <td>
-          <input v-click-focus v-model.number="techCardIngredient.netWeight" type="number" class="form-control weight-input" @input="changeGrossWeight($event, techCardIngredient)">г
+          <input v-click-focus
+                 v-model.number="techCardIngredient.netWeight"
+                 type="number"
+                 class="form-control weight-input"
+                 @blur="setZeroIfEmpty($event, techCardIngredient, 'netWeight')"
+                 @input="changeGrossWeight($event, techCardIngredient)">г
         </td>
         <td>
           <div v-if="techCardIngredient.ingredient.id !== null">
             {{getIngredientPrice(techCardIngredient)}}руб
           </div>
+        </td>
+        <td>
+          <i class="table-action fa fa-remove" @click="deleteTechCardIngredient(i)"></i>
         </td>
       </tr>
       </tbody>

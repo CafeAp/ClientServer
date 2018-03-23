@@ -28,6 +28,7 @@ module.exports = {
     defaultValue: 'ingredient',
   },
   averagePrice: {
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER,
+    defaultValue: 0
   }
 }

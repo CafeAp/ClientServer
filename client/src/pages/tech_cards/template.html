@@ -30,7 +30,7 @@
         <td>{{_sumBy(techCard.techCardIngredients, 'netWeight')}}г</td>
         <td>{{getSelfPrice(techCard)}}р</td>
         <td>{{techCard.price}}р</td>
-        <td>{{getExtraPrice(techCard)}}%</td>
+        <td>{{getExtraPrice(techCard)}}</td>
         <td>
           <i class="table-action fa fa-edit" @click="editTechCard(techCard, i)"></i>
           <i class="table-action fa fa-remove" @click="deleteTechCard(techCard, i)"></i>

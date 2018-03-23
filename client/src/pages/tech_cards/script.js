@@ -32,7 +32,8 @@ export default {
       return Math.round(_sumBy(techCard.techCardIngredients, d => d.ingredient.averagePrice * d.grossWeight) / 1000)
     },
     getExtraPrice: function (techCard) {
-      return Math.round((techCard.price / this.getSelfPrice(techCard) - 1) * 100 * 100) / 100
+      let selfPrice = this.getSelfPrice(techCard)
+      return selfPrice ? `${Math.round((techCard.price / selfPrice - 1) * 100 * 100) / 100}%` : `${techCard.price}р`
     }
   }
 }

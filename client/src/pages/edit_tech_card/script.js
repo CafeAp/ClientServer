@@ -5,6 +5,7 @@ import _sumBy from 'lodash/sumBy'
 import _sum from 'lodash/sum'
 import _capitalize from 'lodash/capitalize'
 import _max from 'lodash/max'
+import _every from 'lodash/every'
 import utils from '@/assets/utils'
 
 export default {
@@ -29,7 +30,7 @@ export default {
       alertMessage: 'alertMessage'
     }),
     validForm() {
-      return !!this.newTechCard.name
+      return !!this.newTechCard.name && this.newTechCard.techCardIngredients.length !== 0 && _every(this.newTechCard.techCardIngredients, d => d.ingredient.id !== null)
     },
     isNew() {
       return this.$route.params.id === undefined
@@ -95,13 +96,19 @@ export default {
     },
     getIngredientPrice: function (techCardIngredient) {
       if (techCardIngredient.ingredient.id === null) return 0
-      return Math.ceil(techCardIngredient.ingredient.averagePrice * techCardIngredient.grossWeight) / 1000
+      return Math.round(techCardIngredient.ingredient.averagePrice * techCardIngredient.grossWeight / 1000 * 100) / 100
     },
     calcTotalPrice: function () {
       this.newTechCard.price = this.selfPrice + Math.round(this.selfPrice * (this.extraPrice * 0.01) * 100) / 100
     },
     calcExtraPrice: function () {
       this.extraPrice = Math.round((this.newTechCard.price / this.selfPrice - 1) * 100 * 100) / 100
+    },
+    deleteTechCardIngredient: function (i) {
+      this.newTechCard.techCardIngredients.splice(i, 1)
+    },
+    setZeroIfEmpty: function (e, object, modelName) {
+      if (!object[modelName]) object[modelName] = 0
     }
   },
   watch: {

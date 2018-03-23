@@ -35,21 +35,42 @@
           Средний чек
         </div>
         <div class="today-item-body">
-          {{averageCheck}}руб
+          {{todayAverageCheck}}руб
         </div>
       </div>
 
     </div>
   </div>
-  <div class="actions">
-    <div class="date-selector">
-      <date-picker v-model="dateRange" not-after range lang="ru"></date-picker>
-      <div class="line-chart" v-if="monthOrders">
-        <chartjs-line :beginzero="true"
+
+  <div class="card month">
+    <div class="card-header">
+      <div class="actions">
+        <div class="date-selector">
+          <date-picker v-model="dateRange" not-after range lang="ru"></date-picker>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <ul v-if="monthOrders" class="nav nav-pills">
+        <li v-for="navItem in monthNavItems" class="nav-item">
+          <a :class="['nav-link', {active: activeMonthNavItem === navItem}]" href="#" @click="changeActiveMonthNavItem(navItem)">
+            <div class="name">{{navItem.displayName}}</div>
+            <div class="value">{{navItem.getValue()}}</div>
+          </a>
+        </li>
+      </ul>
+      <div class="line-chart">
+        <chartjs-line v-if="monthOrders && needRenderLine"
+                      ref="chart"
+                      :datalabel="activeMonthNavItem.displayName"
+                      :beginzero="true"
                       :height="300"
+                      :bind="true"
                       :width="lineChartWidth"
-                      :datalabel="dataLabelForLineChart"
+                      :fill="true"
                       :labels="formattedMonthLabels"
+                      :backgroundcolor="'rgba(0,123,255,0.2)'"
+                      :bordercolor="'#007bff'"
                       :pointborderwidth="4"
                       :pointbordercolor="'#f35009'"
                       :pointhoverborderwidth="3"

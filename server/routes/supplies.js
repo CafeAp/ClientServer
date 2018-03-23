@@ -31,7 +31,7 @@ function updateAveragePrice(warehouseItem) {
       i++
     }
     sequelize.models[warehouseItem.type === 'ingredient' ? 'Ingredient' : 'Goods'].findById(warehouseItem.entityId).then(entity => {
-      entity.update({averagePrice: Math.round((_sum(prices) / _sum(amounts)) * 100) / 100}, {fields: ['averagePrice']})
+      entity.update({averagePrice: _sum(amounts) ? Math.round((_sum(prices) / _sum(amounts)) * 100) / 100 : 0}, {fields: ['averagePrice']})
     })
   })
 }

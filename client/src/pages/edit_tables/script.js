@@ -12,7 +12,8 @@ export default {
   data() {
     return {
       room: null,
-      edittingTable: null
+      edittingTable: null,
+      saveInProgress: false
     }
   },
   created() {
@@ -45,9 +46,14 @@ export default {
       table.height = h
     },
     saveRoomConfig() {
+      if (this.saveInProgress) return false
+      this.saveInProgress = true
       this.$http.post('api/rooms/edit', this.room).then(resp => {
+        this.saveInProgress = false
+        this.room = resp.body
         this.$store.dispatch('setAlertMessageForTime', 'success')
       }, () => {
+        this.saveInProgress = false
         this.$store.dispatch('setAlertMessageForTime', 'error')
       })
     },

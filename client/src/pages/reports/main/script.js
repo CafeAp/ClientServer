@@ -1,6 +1,8 @@
 import utils from '@/assets/utils'
 import _sumBy from 'lodash/sumBy'
 import _sum from 'lodash/sum'
+import _groupBy from 'lodash/groupBy'
+import _map from 'lodash/map'
 import DatePicker from 'vue2-datepicker'
 import moment from 'moment'
 
@@ -12,17 +14,20 @@ export default {
       lineChartWidth: 0,
       todayOrders: null,
       monthOrders: null,
-      dateRange: null
+      dateRange: null,
+      activeMonthNavItem: null,
+      needRenderLine: true
     }
   },
   created: function () {
+    this.activeMonthNavItem = this.monthNavItems[0]
     this.dateRange = [moment().subtract(1, 'months'), moment()]
     this.$http.get('api/orders/today/list').then(resp => {
       this.todayOrders = resp.body
     })
   },
   mounted: function () {
-    this.lineChartWidth = this.$el.clientWidth
+    this.lineChartWidth = this.$el.querySelector('.line-chart').clientWidth
   },
   computed: {
     todayProceeds: function () {
@@ -37,6 +42,9 @@ export default {
     todayChecks: function () {
       return this.todayOrders.length
     },
+    todayAverageCheck: function () {
+      return this.todayProceeds / this.todayChecks
+    },
     monthProceeds: function () {
       return this.getProceeds(this.monthOrders)
     },
@@ -49,17 +57,31 @@ export default {
     monthChecks: function () {
       return this.monthOrders.length
     },
-    averageCheck: function () {
-      return this.todayProceeds / this.todayChecks
+    monthAverageCheck: function () {
+      return this.monthProceeds / this.monthChecks
     },
     formattedMonthLabels: function () {
-      return this.monthOrders.map(d => moment(d.createdAt).format('DD-MM-YYYY'))
+      return Object.keys(this.rangeOrdersGroupedByDay)
+    },
+    rangeOrdersGroupedByDay: function () {
+      return _groupBy(this.monthOrders, val => moment(val.createdAt).format('DD-MM-YYYY'))
     },
     dataForLineChart: function () {
-      return this.monthOrders.map(d => this.getProceeds([d]))
+      let methods = {
+        proceeds: orders => _map(orders, (val, key) => this.getProceeds(val)),
+        profit: orders => _map(orders, (val, key) => this.getProceeds(val) - this.getCosts(val)),
+        checks: orders => _map(orders, (val, key) => val.length),
+        averageCheck: orders => _map(orders, (val, key) => this.getProceeds(val) / val.length)
+      }
+      return methods[this.activeMonthNavItem.name](this.rangeOrdersGroupedByDay)
     },
-    dataLabelForLineChart: function () {
-      return 'Прибыль'
+    monthNavItems: function () {
+      return [
+        {displayName: 'Выручка', name: 'proceeds', getValue: () => `${this.monthProceeds}руб`},
+        {displayName: 'Прибыль', name: 'profit', getValue: () => `${this.monthProfit}руб`},
+        {displayName: 'Чеков', name: 'checks', getValue: () => this.monthChecks},
+        {displayName: 'Средний чек', name: 'averageCheck', getValue: () => `${this.monthAverageCheck}руб`}
+      ]
     }
   },
   methods: {
@@ -82,6 +104,16 @@ export default {
           return orderItem.selfPrice * orderItem.amount
         })
       }))
+    },
+    changeActiveMonthNavItem(navItem) {
+      this.activeMonthNavItem = navItem
+      this.refreshLine()
+    },
+    refreshLine: function () {
+      this.needRenderLine = false
+      this.$nextTick(() => {
+        this.needRenderLine = true
+      })
     }
   },
   watch: {

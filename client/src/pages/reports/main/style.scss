@@ -16,10 +16,31 @@
       }
     }
   }
-  .actions {
-    margin-top: 10px;
-  }
-  .line-chart {
-    height: 200px;
+  .month {
+    margin-top: 20px;
+    .line-chart {
+      height: 300px;
+      width: 100%;
+      margin-top: 13px;
+      background: #fff;
+    }
+    .card-header {
+      vertical-align: middle;
+    }
+    .card-body {
+      ul {
+        display: flex;
+        justify-content: space-around;
+        a {
+          text-align: center;
+          .name {
+            font-size: 14px;
+          }
+          &:not(.active) {
+            border: 1px dashed lightgrey;
+          }
+        }
+      }
+    }
   }
 }
